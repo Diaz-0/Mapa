@@ -32,3 +32,6 @@ build/
 *.tmp
 *.temp
 
+# Large GeoJSON files
+GeoJSON/georef-mexico-municipality-millesime@public.json
+
