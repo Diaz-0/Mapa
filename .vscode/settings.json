@@ -1,0 +1,10 @@
+{
+    "liveServer.settings.headers": [
+        {
+            "enable": true,
+            "name": "Permissions-Policy",
+            "value": "geolocation=(), microphone=(), camera=()"
+        }
+    ],
+    "compile-hero.disable-compile-files-on-did-save-code": false
+}

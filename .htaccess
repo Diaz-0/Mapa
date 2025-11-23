@@ -1,0 +1,4 @@
+# Configuración de Permissions-Policy para evitar errores
+<IfModule mod_headers.c>
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+</IfModule>

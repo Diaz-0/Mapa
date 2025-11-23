@@ -1,0 +1,78 @@
+<!-- Panel flotante de gráficas -->
+<div class="graficas-panel" id="graficas-panel">
+    <div class="graficas-header" id="graficas-header">
+        <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; text-align: center; letter-spacing: 1px; text-shadow: 0 0 10px #00ffe7; color: #00ffe7; font-weight: bold; flex: 1; cursor: move;">
+            <i class="fas fa-chart-bar"></i> Gráficas de Cobertura
+        </h3>
+        <div class="graficas-window-controls">
+            <button class="graficas-control-btn graficas-maximize" id="graficas-maximize" title="Maximizar" aria-label="Maximizar">
+                <span class="control-icon maximize-icon"></span>
+            </button>
+            <button class="graficas-control-btn graficas-close" id="graficas-close" title="Cerrar" aria-label="Cerrar">
+                <span class="control-icon close-icon"></span>
+            </button>
+        </div>
+    </div>
+    <div class="graficas-content" id="graficas-content">
+        <!-- Selector de tipo de gráfica -->
+        <div class="graficas-type-selector">
+            <label>Tipo de gráfica:</label>
+            <select id="graficas-type-select" class="graficas-select">
+                <option value="temporadas" selected>Temporadas (Primavera, Verano, Otoño, Invierno) - km²</option>
+                <option value="inundacion">Inundación (Antes, Durante, Después) - km²</option>
+            </select>
+        </div>
+        <!-- Selectores de año para las gráficas -->
+        <div class="graficas-selectors">
+            <div class="grafica-selector-group">
+                <label>Izquierda:</label>
+                <select id="graficas-year-left" class="graficas-select">
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020" selected>2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+            <div class="grafica-selector-group">
+                <label>Derecha:</label>
+                <select id="graficas-year-right" class="graficas-select">
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021" selected>2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+            </div>
+        </div>
+        <div class="graficas-container">
+            <div class="grafica-item">
+                <label>IZQUIERDA</label>
+                <canvas id="chart-left"></canvas>
+            </div>
+            <div class="grafica-item">
+                <label>DERECHA</label>
+                <canvas id="chart-right"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botón flotante para abrir/cerrar panel de gráficas -->
+<button id="toggle-graficas-btn" type="button" title="Mostrar/Ocultar Gráficas" aria-label="Mostrar/Ocultar Gráficas">
+    <i class="fas fa-chart-bar"></i>
+    <span>Gráficas</span>
+</button>
+

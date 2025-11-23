@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <!-- Meta tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mapa Coroplético Interactivo de Tabasco</title>
+        
+        <!-- Fuentes futuristas -->
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        
+        <!-- Estilos CSS modulares -->
+        <link rel="stylesheet" href="/./Css/base.css">
+        <link rel="stylesheet" href="/./Css/mapa.css">
+        <link rel="stylesheet" href="/./Css/sidebar.css">
+        <link rel="stylesheet" href="/./Css/efectos-futuristas.css">
+        <link rel="stylesheet" href="/./Css/radar.css">
+        <link rel="stylesheet" href="/./Css/meteoblue.css">
+        <link rel="stylesheet" href="/./Css/comparador-sidebar.css">
+        
+        <!-- Leaflet Core -->
+        <link rel="stylesheet" href="/./Plugins/leaflet.css" />
+        <script src="/./Plugins/leaflet.js"></script>
+        
+        <!-- Leaflet Side-by-Side Plugin - USAR ESTA VERSIÓN -->
+        <script src="https://lab.digital-democracy.org/leaflet-side-by-side/leaflet-side-by-side.js"></script>
+        
+        <!-- Leaflet Draw - Herramientas de dibujo -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+        
+        <!-- Leaflet MiniMap -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.min.js"></script>
+        
+        <!-- Chart.js para gráficas -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    </head>
+    
+
+<body>
+
+    <!-- Botón para mostrar el sidebar cuando está oculto (desktop) -->
+    <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" title="Mostrar menú" aria-label="Mostrar menú">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Contenedor principal del mapa -->
+    <main class="main-container">
+        <div id="contenedor-del-mapa"></div>
+        <!-- Overlay Meteoblue encima del mapa -->
+        <div id="meteoblue-overlay" aria-hidden="false">
+            <iframe src="https://www.meteoblue.com/es/tiempo/mapas/widget?windAnimation=1&gust=1&satellite=1&cloudsAndPrecipitation=1&temperature=1&sunshine=1&extremeForecastIndex=1&geoloc=fixed&tempunit=C&windunit=km%252Fh&lengthunit=metric&zoom=6&autowidth=auto"scrolling="no"
+            allowtransparency="true"
+            sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+            <div id="meteoblue-attrib"><a href="https://www.meteoblue.com/es/tiempo/mapas/index" target="_blank" rel="noopener"
+            style="color:#fff;text-decoration:underline">meteoblue</a></div>
+        </div>
+        <!-- Botón flotante para activar/desactivar el iframe -->
+        <button id="toggle-meteoblue-btn" type="button" aria-pressed="true" class="active">
+            <i class="fa-solid fa-cloud"></i>
+            <span>Meteoblue</span>
+        </button>
+        <!-- Botón para resetear el zoom al nivel original -->
+        <button id="reset-zoom-btn" type="button" title="Restaurar zoom original">
+            <i class="fas fa-home"></i>
+        </button>
+    </main>
+
+    <!-- Popup flotante para mensajes -->
+    <div id="popup-flotante" class="popup-flotante" style="display:none;">
+        <div id="popup-contenido"></div>
+    </div>
+
+    <!-- Contenedor para cargar los efectos futuristas -->
+    <div id="efectos-container"></div>
+
+    <!-- Contenedor para cargar la barra lateral -->
+    <div id="sidebar-container"></div>
+
+    <!-- Contenedor para cargar el sidebar del comparador -->
+    <div id="comparador-sidebar-container"></div>
+    
+    <!-- Contenedor para cargar el panel de gráficas -->
+    <div id="graficas-container"></div>
+
+    <!-- Scripts del mapa -->
+    <script src="/./Layers/layer.js"></script>
+    <script src="/./Js/index.js"></script>
+    <script src="/./Js/Dibujo_mnmapa.js"></script>
+    <script src="/./Js/Puntos.js"></script>
+    <script src="/./Js/mapa-agua.js"></script>
+    <script src="/./Js/efectos-futuristas.js"></script>
+    <script src="/./Js/wms-enhancer.js"></script>
+    <script src="/./Js/datos-agua-loader.js"></script>
+    <script src="/./Js/comparador-agua.js"></script>
+
+    <!-- Script para cargar los paneles externos -->
+    <script>
+        // Función para cargar los efectos futuristas
+        function loadEfectosFuturistas() {
+            fetch('/Html/efectos-futuristas.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('efectos-container').innerHTML = html;
+                    console.log('Efectos futuristas cargados');
+                    
+                    // Inicializar efectos después de cargar usando las funciones del archivo JS
+                    setTimeout(() => {
+                        if (window.initializeAllFuturisticEffects) {
+                            window.initializeAllFuturisticEffects();
+                        }
+                    }, 100);
+                })
+                .catch(error => {
+                    console.error('Error cargando efectos futuristas:', error);
+                });
+        }
+
+        // Función para cargar el panel de gráficas
+        function loadGraficasPanel() {
+            fetch('/Html/graficas-panel.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('graficas-container').innerHTML = html;
+                    console.log('Panel de gráficas cargado');
+                    
+                    // Inicializar panel después de cargar
+                    setTimeout(() => {
+                        if (window.initializeGraficasPanel) {
+                            window.initializeGraficasPanel();
+                        }
+                    }, 100);
+                })
+                .catch(error => {
+                    console.error('Error cargando panel de gráficas:', error);
+                });
+        }
+
+        // Función para cargar la barra lateral
+function loadSidebar() {
+    // Cargar la barra lateral desde archivo externo
+    fetch('/Html/sidebar.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('sidebar-container').innerHTML = html;
+            console.log('Barra lateral cargada');
+            
+            // Verificar si el sidebar está visible por defecto y agregar clase al body
+            setTimeout(function() {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar && !sidebar.classList.contains('hidden')) {
+                    document.body.classList.add('sidebar-open');
+                }
+            }, 100);
+            
+            // Configurar eventos del botón de cerrar sidebar
+            setupSidebarToggle();
+            
+            // Configurar eventos después de cargar la barra lateral
+            if (window.configurarEventosPaneles) {
+                window.configurarEventosPaneles();
+            }
+            
+            // Mover el control de capas a la barra lateral
+            setTimeout(function() {
+                var layersControl = document.querySelector('.leaflet-control-layers');
+                var layersContainer = document.getElementById('layers-container');
+                
+                console.log('Buscando control de capas:', layersControl);
+                console.log('Contenedor de capas:', layersContainer);
+                
+                if (layersControl && layersContainer) {
+                    // Expandir el control de capas si está colapsado
+                    if (layersControl.classList.contains('leaflet-control-layers-collapsed')) {
+                        var toggleButton = layersControl.querySelector('.leaflet-control-layers-toggle');
+                        if (toggleButton) {
+                            toggleButton.click();
+                        }
+                    }
+                    
+                    // Mover el control a la barra lateral
+                    layersContainer.appendChild(layersControl);
+                    layersControl.style.position = 'static';
+                    layersControl.style.margin = '0';
+                    layersControl.style.boxShadow = 'none';
+                    layersControl.style.borderRadius = '0';
+                    layersControl.style.background = 'transparent';
+                    layersControl.style.border = 'none';
+                    
+                    // Ocultar el botón toggle ya que no lo necesitamos
+                    var toggleButton = layersControl.querySelector('.leaflet-control-layers-toggle');
+                    if (toggleButton) {
+                        toggleButton.style.display = 'none';
+                    }
+                    
+                    console.log('Control de capas movido exitosamente');
+                } else {
+                    console.log('No se pudo encontrar el control de capas o el contenedor');
+                }
+            }, 500);
+        })
+        .catch(error => {
+            console.error('Error cargando barra lateral:', error);
+        });
+}
+
+        
+        // Función para configurar el toggle del sidebar (ocultar/mostrar)
+        function setupSidebarToggle() {
+            const sidebar = document.querySelector('.sidebar');
+            const closeBtn = document.getElementById('sidebar-close-btn');
+            const topbar = document.querySelector('.sidebar-topbar');
+            const toggleBtn = document.getElementById('sidebar-toggle-btn');
+            
+            if (!sidebar) return;
+
+            // Función para ocultar el sidebar
+            function hideSidebar() {
+                sidebar.classList.add('hidden');
+                document.body.classList.remove('sidebar-open');
+                // El sidebar se superpone, no afecta el main-container
+                if (toggleBtn) {
+                    toggleBtn.style.display = 'flex';
+                }
+                // No es necesario invalidar el tamaño porque el main-container no cambia
+            }
+            
+            // Función para mostrar el sidebar
+            function showSidebar() {
+                sidebar.classList.remove('hidden');
+                document.body.classList.add('sidebar-open');
+                // El sidebar se superpone, no afecta el main-container
+                if (toggleBtn) {
+                    toggleBtn.style.display = 'none';
+                }
+                // No es necesario invalidar el tamaño porque el main-container no cambia
+            }
+            
+            // Evento del botón de cerrar
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    hideSidebar();
+                });
+            }
+            // Clic en toda la barra superior también cierra
+            if (topbar) {
+                topbar.addEventListener('click', function(e) {
+                    // permitir que futuros elementos internos puedan cancelar si es necesario
+                    hideSidebar();
+                });
+            }
+            
+            // Evento del botón de toggle (mostrar cuando está oculto)
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showSidebar();
+                });
+            }
+        }
+        
+
+        // Función para cargar el sidebar del comparador
+        function loadComparadorSidebar() {
+            fetch('/Html/comparador-sidebar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('comparador-sidebar-container').innerHTML = html;
+                    console.log('Sidebar del comparador cargado');
+                    
+                    // Configurar eventos del sidebar del comparador
+                    setupComparadorSidebar();
+                })
+                .catch(error => {
+                    console.error('Error cargando sidebar del comparador:', error);
+                });
+        }
+
+        // Configurar eventos y funcionalidad del sidebar del comparador
+        function setupComparadorSidebar() {
+            const toggleBtn = document.getElementById('comparador-toggle-btn');
+            const closeBtn = document.getElementById('comparador-close-btn');
+            const sidebar = document.getElementById('comparador-sidebar');
+            const mainContainer = document.querySelector('.main-container');
+            
+            if (toggleBtn && sidebar) {
+                toggleBtn.addEventListener('click', function() {
+                    sidebar.classList.add('active');
+                    toggleBtn.classList.add('hidden');
+                    if (mainContainer) {
+                        mainContainer.classList.add('comparador-active');
+                    }
+                });
+            }
+            
+            if (closeBtn && sidebar) {
+                closeBtn.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                    if (toggleBtn) {
+                        toggleBtn.classList.remove('hidden');
+                    }
+                    if (mainContainer) {
+                        mainContainer.classList.remove('comparador-active');
+                    }
+                });
+            }
+            
+            // Establecer modo swipe por defecto en el nuevo sidebar
+            if (document.getElementById('comparador-sidebar-btn-mode-swipe')) {
+                document.getElementById('comparador-sidebar-btn-mode-swipe').classList.add('active');
+            }
+        }
+
+        // Cargar efectos futuristas y barra lateral después de que se carguen todos los scripts
+        window.addEventListener('load', function() {
+            // Cargar efectos futuristas primero
+            setTimeout(loadEfectosFuturistas, 500);
+            setTimeout(loadGraficasPanel, 600);
+            
+            // Cargar barra lateral después
+            setTimeout(loadSidebar, 1000); // Delay de 1000ms para asegurar que todos los scripts estén cargados
+            
+            // Cargar sidebar del comparador
+            setTimeout(loadComparadorSidebar, 1500);
+            
+            
+            // Preparar overlay de Meteoblue
+            setTimeout(function() {
+                var mapContainer = document.getElementById('contenedor-del-mapa');
+                if (mapContainer && getComputedStyle(mapContainer).position === 'static') {
+                    // Asegurar contexto de posicionamiento para el overlay
+                    mapContainer.style.position = 'relative';
+                }
+                
+                var toggleBtn = document.getElementById('toggle-meteoblue-btn');
+                var overlay = document.getElementById('meteoblue-overlay');
+                if (toggleBtn && overlay) {
+                    var active = true; // Iniciar activado por defecto
+                    var setState = function(next) {
+                        active = next;
+                        overlay.style.display = active ? 'block' : 'none';
+                        toggleBtn.classList.toggle('active', active);
+                        toggleBtn.setAttribute('aria-pressed', String(active));
+                        overlay.setAttribute('aria-hidden', String(!active));
+                        
+                        // Ocultar/mostrar el panel de estadísticas cuando se activa/desactiva MeteoBlue
+                        var statsPanel = document.querySelector('.stats-panel');
+                        if (statsPanel) {
+                            if (active) {
+                                // Cuando MeteoBlue está activo, ocultar el panel de estadísticas
+                                statsPanel.style.display = 'none';
+                            } else {
+                                // Cuando MeteoBlue está inactivo, mostrar el panel de estadísticas
+                                statsPanel.style.display = 'block';
+                            }
+                        }
+                    };
+                    // Activar el estado inicial
+                    setState(true);
+                    toggleBtn.addEventListener('click', function() {
+                        setState(!active);
+                    });
+                    // Cerrar con ESC
+                    document.addEventListener('keydown', function(ev){
+                        if (ev.key === 'Escape' && active) setState(false);
+                    });
+                }
+            }, 800);
+            
+            // Configurar botón de reset de zoom
+            setTimeout(function() {
+                var resetZoomBtn = document.getElementById('reset-zoom-btn');
+                if (resetZoomBtn) {
+                    resetZoomBtn.addEventListener('click', function() {
+                        // Verificar si la función resetView está disponible
+                        if (typeof window.resetView === 'function') {
+                            window.resetView();
+                        } else if (typeof mapa !== 'undefined') {
+                            // Si resetView no está disponible, usar setView directamente
+                            mapa.setView([17.668149360093285, -91.53945922851564], 9);
+                        } else {
+                            console.error('No se pudo encontrar el mapa para resetear el zoom');
+                        }
+                    });
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+

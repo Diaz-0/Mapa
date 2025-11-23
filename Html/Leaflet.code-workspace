@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../../../../Downloads/drive-download-20251110T202907Z-1-001/plantilla_ks/LATEX - copia"
+		}
+	],
+	"settings": {
+		"compile-hero.disable-compile-files-on-did-save-code": false,
+		"liveServer.settings.multiRootWorkspaceName": "Leaflet"
+	}
+}

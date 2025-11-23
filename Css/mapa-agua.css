@@ -1,0 +1,111 @@
+/* Estilos específicos para el mapa de agua */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+  }
+  
+  header {
+    background: linear-gradient(135deg, #0f766e, #14b8a6);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  
+  header h1 {
+    margin: 0 0 8px 0;
+    font-size: 2em;
+  }
+  
+  header p {
+    margin: 0;
+    font-size: 1em;
+    opacity: 0.9;
+  }
+  
+  /* Contenedor principal */
+  .contenedor-mapa {
+    display: flex;
+    margin: 20px;
+    gap: 20px;
+    height: calc(100vh - 180px);
+  }
+  
+  /* Mapa */
+  #mapa-agua {
+    flex: 3;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 1;
+  }
+  
+  /* Panel lateral */
+  #panel-info {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    max-width: 350px;
+  }
+  
+  #panel-info h2 {
+    color: #0f766e;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 3px solid #14b8a6;
+    padding-bottom: 8px;
+  }
+  
+  #panel-info h3 {
+    color: #0f766e;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+  }
+  
+  #panel-info ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #panel-info li {
+    margin: 10px 0;
+    padding: 12px;
+    background: #f0fdfa;
+    border-left: 4px solid #14b8a6;
+    border-radius: 4px;
+    transition: transform 0.2s;
+  }
+  
+  #panel-info li:hover {
+    transform: translateX(5px);
+    background: #ccfbf1;
+  }
+  
+  footer {
+    background: #0f766e;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 0;
+  }
+  
+  
+  /* Estilos para controles de Leaflet */
+  .leaflet-control-layers {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    padding: 10px;
+  }
+  
+  .leaflet-control-layers-toggle {
+    background-size: 20px 20px;
+  }
+  

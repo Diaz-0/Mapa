@@ -1,0 +1,225 @@
+<!-- Barra lateral derecha -->
+
+
+
+
+<aside id="sidebar" class="sidebar">
+    <!-- Barra superior del sidebar con botón de cerrar -->
+    <div class="sidebar-topbar">
+        <div class="sidebar-topbar-title"></div>
+        <button id="sidebar-close-btn" class="sidebar-close-btn" title="Cerrar menú" aria-label="Cerrar menú">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <!-- Panel de herramientas de dibujo -->
+    <section class="sidebar-section">
+        <div class="section-header" onclick="toggleSection('drawing-section')">
+            <span class="section-icon">✏️</span>
+            <span class="section-title">Herramientas de Dibujo</span>
+            <span class="section-toggle" id="drawing-toggle">▼</span>
+        </div>
+        
+        <div class="section-content" id="drawing-section">
+            <!-- Herramientas de dibujo -->
+            <div class="tools-group">
+                <h4>Dibujar</h4>
+                <div class="tools-grid">
+                    <button class="tool-btn" onclick="activateDrawTool('marker')" title="Marcador">
+                        📍 Marcador
+                    </button>
+                    <button class="tool-btn" onclick="activateDrawTool('polyline')" title="Línea">
+                        📏 Línea
+                    </button>
+                    <button class="tool-btn" onclick="activateDrawTool('rectangle')" title="Rectángulo">
+                        🔲 Rectángulo
+                    </button>
+                    <button class="tool-btn" onclick="activateDrawTool('circle')" title="Círculo">
+                        ⭕ Círculo
+                    </button>
+                    <button class="tool-btn" onclick="activateDrawTool('polygon')" title="Polígono">
+                        🔺 Polígono
+                    </button>
+                </div>
+            </div>
+
+            <!-- Acciones de edición -->
+            <div class="tools-group">
+                <h4>Editar</h4>
+                <div class="actions-grid">
+                    <button class="tool-btn edit-btn" onclick="toggleEditMode()" title="Editar dibujos">
+                        ✏️ Editar
+                    </button>
+                    <button class="tool-btn delete-btn" onclick="clearAllDrawings()" title="Eliminar todos los dibujos">
+                        🗑️ Limpiar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Exportación -->
+            <div class="tools-group">
+                <h4>Exportar</h4>
+                <button id="export" class="export-btn">
+                    📥 Exportar Dibujos (0)
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- Panel de herramientas avanzadas 
+    <section class="sidebar-section">
+        <div class="section-header" onclick="toggleSection('advanced-section')">
+            <span class="section-icon">⚙️</span>
+            <span class="section-title">Herramientas Avanzadas</span>
+            <span class="section-toggle" id="advanced-toggle">▼</span>
+        </div>
+        
+        <div class="section-content" id="advanced-section">
+            <!-- Herramientas de análisis 
+            <div class="tools-group">
+                <h4>Análisis</h4>
+                <div class="tools-grid">
+                    <button class="tool-btn analysis-btn" onclick="measureDistance()" title="Medir distancia">
+                        📏 Medir
+                    </button>
+                    <button class="tool-btn analysis-btn" onclick="measureArea()" title="Medir área">
+                        📐 Área
+                    </button>
+                    <button class="tool-btn analysis-btn" onclick="getCoordinates()" title="Obtener coordenadas">
+                        📍 Coordenadas
+                    </button>
+                    <button class="tool-btn analysis-btn" onclick="showStatistics()" title="Estadísticas">
+                        📊 Estadísticas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Herramientas de configuración
+            <div class="tools-group">
+                <h4>Configuración</h4>
+                <div class="tools-grid">
+                    <button class="tool-btn config-btn" onclick="resetView()" title="Vista inicial">
+                        🏠 Inicio
+                    </button>
+                    <button class="tool-btn config-btn" onclick="toggleFullscreen()" title="Pantalla completa">
+                        ⛶ Pantalla Completa
+                    </button>
+                    <button class="tool-btn config-btn" onclick="exportMap()" title="Exportar mapa">
+                        💾 Exportar
+                    </button>
+                    <button class="tool-btn config-btn" onclick="showHelp()" title="Ayuda">
+                        ❓ Ayuda
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>-->
+
+    <!-- Panel de capas del mapa -->
+    <section class="sidebar-section">
+        <div class="section-header" onclick="toggleSection('layers-section')">
+            <span class="section-icon">🗺️</span>
+            <span class="section-title">Capas del Mapa</span>
+            <span class="section-toggle" id="layers-toggle">▼</span>
+        </div>
+        
+        <div class="section-content" id="layers-section">
+            <div class="layers-container" id="layers-container">
+                <!-- El control de capas de Leaflet se insertará aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Panel de Agua Temporal (NUEVO) -->
+<section class="sidebar-section">
+    <div class="section-header" onclick="toggleSection('agua-temporal-section')">
+        <span class="section-icon">💧</span>
+        <span class="section-title">Agua Temporal 2020</span>
+        <span class="section-toggle" id="agua-temporal-toggle">▼</span>
+    </div>
+    
+    <div class="section-content" id="agua-temporal-section">
+        <div class="tools-group">
+            <h4>Temporadas Detectadas</h4>
+            <p class="section-description">Cuerpos de agua detectados con Sentinel-1 SAR</p>
+            
+            <!-- Controles de capas de agua -->
+            <div class="agua-temporal-controls">
+                <label class="agua-layer-item">
+                    <input type="checkbox" id="agua-primavera" onchange="toggleAguaLayer('primavera', this.checked)">
+                    <span class="layer-color" style="background: #3b82f6;"></span>
+                    <span>Primavera</span>
+                </label>
+                
+                <label class="agua-layer-item">
+                    <input type="checkbox" id="agua-verano" onchange="toggleAguaLayer('verano', this.checked)">
+                    <span class="layer-color" style="background: #eab308;"></span>
+                    <span>Verano</span>
+                </label>
+                
+                <label class="agua-layer-item">
+                    <input type="checkbox" id="agua-otono" onchange="toggleAguaLayer('otono', this.checked)">
+                    <span class="layer-color" style="background: #f97316;"></span>
+                    <span>Otoño</span>
+                </label>
+                
+                <label class="agua-layer-item">
+                    <input type="checkbox" id="agua-invierno" onchange="toggleAguaLayer('invierno', this.checked)">
+                    <span class="layer-color" style="background: #06b6d4;"></span>
+                    <span>nvierno</span>
+                </label>
+            </div>
+            
+            <!-- Botones de acción -->
+            <div class="agua-actions" style="margin-top: 15px;">
+                <button class="tool-btn" onclick="activarTodasLasCapasAgua()" title="Mostrar todas">
+                    Mostrar Todas
+                </button>
+                <button class="tool-btn delete-btn" onclick="desactivarTodasLasCapasAgua()" title="Ocultar todas">
+                    Ocultar Todas
+                </button>
+            </div>
+            
+            <!-- Información adicional -->
+            <div class="agua-info" style="margin-top: 15px; padding: 10px; background: rgba(59, 130, 246, 0.1); border-radius: 5px;">
+                <p style="margin: 0; font-size: 0.85em; color: #64748b;">
+                    <strong>Fuente:</strong> Sentinel-1 GRD<br>
+                    <strong>Procesamiento:</strong> Google Earth Engine & SNAP<br>
+                    <strong>Servidor:</strong> GeoServer
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- Panel de radar integrado - Minimizable (al final) -->
+    <section class="sidebar-section">
+        <div class="section-header radar-header" onclick="toggleRadarSection()">
+            <span class="section-icon">📡</span>
+            <span class="section-title">Sistema Radar</span>
+            <span class="section-toggle" id="radar-toggle">▼</span>
+        </div>
+        
+        <div class="section-content show" id="radar-section">
+            <div class="radar-container">
+                <div class="radar-screen">
+                    <div class="radar-grid"></div>
+                    <div class="radar-sweep"></div>
+                    <!-- Puntos de radar generados dinámicamente -->
+                </div>
+                <div class="radar-label">
+                    <i class="fas fa-radar"></i> Monitoreo Activo
+                </div>
+                <div class="radar-stats">
+                    <div class="radar-stat-item">
+                        <span>Objetos detectados:</span>
+                        <span class="radar-stat-value" id="radar-objects">0</span>
+                    </div>
+                    <div class="radar-stat-item">
+                        <span>Última actualización:</span>
+                        <span class="radar-stat-value" id="radar-time">--:--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</aside>
