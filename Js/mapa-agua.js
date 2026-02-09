@@ -1,180 +1,130 @@
-// Configuración de GeoServer - workspace
-const aguaConfig = {
-    geoserverUrl: 'http://localhost:8080/geoserver/agua_tabasco/wms', 
-    workspace: 'agua_tabasco'
+/**
+ * Lógica para el modo de mapa simple (sin comparador)
+ */
+
+// Estado interno
+const estadoMapa = {
+    mapa: null,
+    capaActual: null,
+    leyenda: null
 };
 
-// Objeto para almacenar las capas de agua
-const capasAgua = {
-    primavera: null,
-    verano: null,
-    otono: null,
-    invierno: null
-};
-
-// Variable para almacenar la referencia al mapa
-let mapaReferencia = null;
-
-// Función para buscar el mapa en diferentes ubicaciones posibles
 function buscarMapa() {
-    // Intentar diferentes nombres de variables globales
-    if (typeof map !== 'undefined') return map;
-    if (typeof mapa !== 'undefined') return mapa;
-    if (typeof window.map !== 'undefined') return window.map;
-    if (typeof window.mapa !== 'undefined') return window.mapa;
-    
-    // Buscar en todas las variables del window
-    for (let key in window) {
-        if (window[key] && window[key]._leaflet_id) {
-            return window[key];
-        }
-    }
-    
-    return null;
+    return window.mapa || window.map || null;
 }
 
-// Crear capas WMS desde GeoServer
-function crearCapaAguaWMS(temporada) {
-    // Mapeo de nombres exactos como están en GeoServer
-    const nombresCapas = {
-        'primavera': 'Agua_Primavera_2020-1',
-        'verano': 'Agua_Verano_2020-1',
-        'otono': 'Agua_Otono_2020-1',
-        'invierno': 'Agua_Invierno_2020-1'
-    };
-    
-    const nombreCapa = nombresCapas[temporada];
-    
-    console.log(`🌊 Creando capa WMS: ${aguaConfig.workspace}:${nombreCapa}`);
-    
-    return L.tileLayer.wms(aguaConfig.geoserverUrl, {
-        layers: `${aguaConfig.workspace}:${nombreCapa}`,
-        format: 'image/png',
-        transparent: true,
-        version: '1.1.0',
-        attribution: 'Sentinel-1 SAR | GEE & SNAP',
-        pane: 'overlayPane',
-        zIndex: 1000
-    });
-}
+// Inicializar y mostrar una capa específica
+async function cambiarCapaPrincipal(temporada) {
+    const mapa = buscarMapa();
+    if (!mapa) return;
 
+    // Obtener año seleccionado (podrías añadir un selector de año en el HTML principal si quisieras)
+    // Por defecto usaremos 2020 como pediste originalmente, o el año actual
+    const year = 2020; 
 
-// Inicializar capas de agua
-function inicializarCapasAgua() {
-    try {
-        // Buscar el mapa
-        mapaReferencia = buscarMapa();
-        
-        if (!mapaReferencia) {
-            console.warn('⏳ El mapa aún no está disponible, reintentando en 1 segundo...');
-            setTimeout(inicializarCapasAgua, 1000);
-            return;
-        }
-
-        console.log('✅ Mapa encontrado, creando capas de agua...');
-
-        // Crear capas para cada temporada
-        capasAgua.primavera = crearCapaAguaWMS('primavera');
-        capasAgua.verano = crearCapaAguaWMS('verano');
-        capasAgua.otono = crearCapaAguaWMS('otono');
-        capasAgua.invierno = crearCapaAguaWMS('invierno');
-
-        console.log('✅ Todas las capas de agua temporal inicializadas correctamente');
-        console.log('📍 Capas disponibles:', Object.keys(capasAgua));
-        
-        // Mostrar notificación
-        if (typeof showNotification === 'function') {
-            showNotification('Capas de agua temporal listas');
-        }
-    } catch (error) {
-        console.error('❌ Error al inicializar capas de agua:', error);
-    }
-}
-
-// Activar/desactivar una capa de agua específica
-function toggleAguaLayer(temporada, activar) {
-    if (!mapaReferencia) {
-        mapaReferencia = buscarMapa();
-        if (!mapaReferencia) {
-            console.error('❌ No se puede acceder al mapa');
-            return;
-        }
-    }
-    
-    if (!capasAgua[temporada]) {
-        console.error(`❌ Capa de ${temporada} no encontrada`);
-        return;
+    // Limpiar capa anterior
+    if (estadoMapa.capaActual) {
+        mapa.removeLayer(estadoMapa.capaActual);
     }
 
-    if (activar) {
-        capasAgua[temporada].addTo(mapaReferencia);
-        console.log(`✅ Capa de ${temporada} activada`);
-        
-        // Verificar si la capa se agregó
-        console.log(`📊 Número de capas en el mapa:`, Object.keys(mapaReferencia._layers).length);
+    console.log(`🌊 Cargando capa principal: ${temporada} ${year}`);
+
+    // Usar el Enhancer para crear la capa correctamente
+    const capa = await window.wmsEnhancer.crearCapaComparacion(year, temporada);
+    
+    if (capa) {
+        capa.addTo(mapa);
+        estadoMapa.capaActual = capa;
     } else {
-        mapaReferencia.removeLayer(capasAgua[temporada]);
-        console.log(`❌ Capa de ${temporada} desactivada`);
+        alert("No se pudo cargar la capa para esta temporada/año.");
     }
 }
 
-// Activar todas las capas de agua
-function activarTodasLasCapasAgua() {
-    console.log('🌊 Activando todas las capas de agua...');
-    
-    let activadas = 0;
-    Object.keys(capasAgua).forEach(temporada => {
-        const checkbox = document.getElementById(`agua-${temporada}`);
-        if (checkbox) {
-            checkbox.checked = true;
-            toggleAguaLayer(temporada, true);
-            activadas++;
+function inicializarLeyenda() {
+    const mapa = buscarMapa();
+    if (!mapa || estadoMapa.leyenda) return;
+
+    const leyenda = L.control({ position: 'bottomright' });
+    leyenda.onAdd = function () {
+        const div = L.DomUtil.create('div', 'info legend leyenda-agua');
+
+        const riesgos = [
+            { label: 'Riesgo Bajo (1-20%)', color: '#FFF3B0', glow: 'rgba(255,243,176,0.6)' },
+            { label: 'Riesgo Medio (21-40%)', color: '#FF9800', glow: 'rgba(255,152,0,0.6)' },
+            { label: 'Riesgo Alto (41-60%)', color: '#FF3B30', glow: 'rgba(255,59,48,0.6)' },   
+            { label: 'Zona Crítica (>60%)', color: '#7F0000', glow: 'rgba(127,0,0,0.7)' }
+        ];
+
+        div.innerHTML = `
+            <h4>Clasificación Sentinel-1</h4>
+            <div class="legend-group">
+                <div class="legend-item">
+                    <span class="legend-swatch" style="background:#003366;"></span>
+                    <span>Agua Permanente</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-swatch" style="background:#66CCFF;"></span>
+                    <span>Agua Temporal</span>
+                </div>
+            </div>
+
+            <h4>Riesgo de Inundación</h4>
+            <div class="legend-group">
+                ${riesgos.map(r => `
+                    <div class="legend-item">
+                        <span class="legend-swatch" style="background:${r.color}; box-shadow:0 0 6px ${r.glow};"></span>
+                        <span>${r.label}</span>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="legend-gradient">
+                <span class="legend-gradient-label">Seguro</span>
+                <div class="legend-gradient-bar"></div>
+                <span class="legend-gradient-label">Crítico</span>
+            </div>
+            <small class="legend-note">Frecuencia (%) acumulada 2017-2026</small>
+        `;
+
+        return div;
+    };
+    leyenda.addTo(mapa);
+    estadoMapa.leyenda = leyenda;
+}
+
+// Función global para los checkboxes del sidebar.html
+window.toggleAguaLayer = function(temporada, activo) {
+    if (activo) {
+        // En este diseño de mapa simple, al activar uno desactivamos los otros visualmente
+        // para evitar superposiciones confusas, o podrías permitir múltiples.
+        // Aquí asumimos comportamiento "Radio Button" visual aunque sean Checkboxes
+        cambiarCapaPrincipal(temporada);
+    } else {
+        if (estadoMapa.capaActual) {
+            buscarMapa().removeLayer(estadoMapa.capaActual);
+            estadoMapa.capaActual = null;
         }
-    });
-    
-    console.log(`✅ ${activadas} capas activadas`);
-    
-    if (typeof showNotification === 'function') {
-        showNotification(`${activadas} capas de agua activadas`);
     }
-}
+};
 
-// Desactivar todas las capas de agua
-function desactivarTodasLasCapasAgua() {
-    console.log('🙈 Desactivando todas las capas de agua...');
-    
-    let desactivadas = 0;
-    Object.keys(capasAgua).forEach(temporada => {
-        const checkbox = document.getElementById(`agua-${temporada}`);
-        if (checkbox) {
-            checkbox.checked = false;
-            toggleAguaLayer(temporada, false);
-            desactivadas++;
-        }
-    });
-    
-    console.log(`✅ ${desactivadas} capas desactivadas`);
-    
-    if (typeof showNotification === 'function') {
-        showNotification('Todas las capas de agua desactivadas');
+window.activarTodasLasCapasAgua = function() {
+    alert("Función no recomendada: Superponer 4 capas WMS saturará la vista. Seleccione una temporada.");
+};
+
+window.desactivarTodasLasCapasAgua = function() {
+    const mapa = buscarMapa();
+    if (estadoMapa.capaActual && mapa) {
+        mapa.removeLayer(estadoMapa.capaActual);
+        estadoMapa.capaActual = null;
     }
-}
-
-// Exportar funciones para uso global
-window.toggleAguaLayer = toggleAguaLayer;
-window.activarTodasLasCapasAgua = activarTodasLasCapasAgua;
-window.desactivarTodasLasCapasAgua = desactivarTodasLasCapasAgua;
-
-// Inicializar cuando la página esté completamente cargada
-console.log('📄 Script de agua temporal cargado');
+    // Desmarcar checkboxes visualmente
+    document.querySelectorAll('.agua-layer-item input').forEach(el => el.checked = false);
+};
 
 window.addEventListener('load', function() {
-    console.log('🚀 Iniciando módulo de agua temporal...');
-    console.log('🔧 Configuración GeoServer:', aguaConfig);
-    
-    // Esperar 3 segundos para que el mapa se inicialice
-    setTimeout(function() {
-        console.log('⏰ Iniciando búsqueda del mapa...');
-        inicializarCapasAgua();
-    }, 3000);
+    setTimeout(() => {
+        inicializarLeyenda();
+        // Cargar invierno por defecto si se desea
+        // cambiarCapaPrincipal('Invierno'); 
+    }, 2000);
 });

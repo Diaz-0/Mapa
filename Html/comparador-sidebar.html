@@ -1,110 +1,113 @@
-<!-- ========================================
-     BARRA INFERIOR DEL COMPARADOR DE AGUA TEMPORAL
-     ========================================= -->
-     
+<div id="comparador-barra" class="comparador-barra-inferior">
+  <div class="comparador-barra-content comp-grid">
+    
+    <section class="comp-sec comp-sec-close">
+      <button id="comparador-barra-close" class="comparador-barra-close" title="Ocultar comparador" aria-label="Ocultar comparador">✕</button>
+    </section>
 
-      <div id="comparador-barra" class="comparador-barra-inferior">
-        <div class="comparador-barra-content comp-grid">
-          <!-- Sección 0: Botón de cerrar dedicado al inicio -->
-          <section class="comp-sec comp-sec-close">
-            <button id="comparador-barra-close" class="comparador-barra-close" title="Ocultar comparador" aria-label="Ocultar comparador">✕</button>
-          </section>
-          <!-- Sección 1: Controles principales -->
-          <section class="comp-sec comp-sec-1">
-            <div class="comp-modes">
-            <button class="mode-btn" id="comparador-barra-btn-mode-animate" onclick="cambiarModoComparadorBarra('animate')">
-              <i class="fas fa-play-circle"></i> ANIMAR
-            </button>
-              <button class="mode-btn" id="comparador-barra-btn-mode-swipe" onclick="cambiarModoComparadorBarra('swipe')">
-                <i class="fas fa-grip-lines-vertical"></i> BARRIDO
-              </button>
-          </div>
-          </section>
+    <section class="comp-sec comp-sec-1">
+      <div class="comp-modes">
+        <button class="mode-btn" id="comparador-barra-btn-mode-animate" onclick="cambiarModoComparadorBarra('animate')" title="Modo Animación">
+          <i class="fas fa-play-circle"></i> ANIMAR
+        </button>
+        <button class="mode-btn active" id="comparador-barra-btn-mode-swipe" onclick="cambiarModoComparadorBarra('swipe')" title="Modo Barrido">
+          <i class="fas fa-grip-lines-vertical"></i> BARRIDO
+        </button>
+      </div>
+    </section>
+    
+    <section class="comp-sec comp-sec-2">
+      <div class="comp-date-header">
+        <div class="date-actions">
+          <button id="comparador-geotiff-btn" class="link-btn" title="Descargar GeoTIFF"><i class="fas fa-download"></i><span>GeoTIFF</span></button>
           
-          <!-- Sección 2: Rango de fechas -->
-          <section class="comp-sec comp-sec-2">
-            <div class="comp-date-header">
-              <!-- Título removido por solicitud -->
-              <div class="date-actions">
-                <button class="link-btn" title="Descargar GeoTIFF"><i class="fas fa-download"></i><span>Descargar GeoTIFF</span></button>
-                <button id="comparador-activar-top" class="link-btn link-activate" title="Activar comparador" onclick="activarComparadorBarra()"><i class="fas fa-play"></i><span>Activar</span></button>
-                <button id="comparador-desactivar-top" class="link-btn link-deactivate" title="Desactivar comparador" style="display:none;" onclick="desactivarComparadorBarra()"><i class="fas fa-stop"></i><span>Desactivar</span></button>
-              </div>
-            </div>
-            <!-- Subtítulo centrado arriba de las fechas -->
-            <div class="date-centered"><span>Elige dos años para comparar</span></div>
-          <div class="comparador-barra-selectores">
-            <div class="comparador-barra-col">
-                <label class="comp-col-title">Izquierda</label>
-                <div class="select-pair">
-              <select id="comparador-barra-year-left" class="comparador-select">
-                <option value="2015">2015</option>
-                <option value="2016">2016</option>
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020" selected>2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-              </select>
-                <select id="comparador-barra-season-left" class="comparador-select small">
-                <option value="Primavera">Primavera</option>
-                <option value="Verano" selected>Verano</option>
-                <option value="Otono">Otoño</option>
-                <option value="Invierno">Invierno</option>
-              </select>
-                </div>
-            </div>
-            <div class="comparador-barra-col">
-                <label class="comp-col-title">Derecha</label>
-                <div class="select-pair">
-              <select id="comparador-barra-year-right" class="comparador-select">
-                <option value="2015">2015</option>
-                <option value="2016">2016</option>
-                <option value="2017">2017</option>
-                <option value="2018">2018</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021" selected>2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-              </select>
-                <select id="comparador-barra-season-right" class="comparador-select small">
-                <option value="Primavera">Primavera</option>
-                <option value="Verano" selected>Verano</option>
-                <option value="Otono">Otoño</option>
-                <option value="Invierno">Invierno</option>
-              </select>
-            </div>
-          </div>
-            </div>
-            <div class="comparador-barra-acciones" style="display:none;"></div>
-          </section>
+          <button id="comparador-activar-top" class="link-btn link-activate" title="Cargar Capas / Iniciar animación" onclick="comparadorActivarClick()">
+            <i class="fas fa-play"></i><span>ACTIVAR</span>
+          </button>
+          
+          <button id="comparador-desactivar-top" class="link-btn link-deactivate" title="Detener comparador o animación" style="display:none;" onclick="comparadorDetenerClick()">
+            <i class="fas fa-stop"></i><span>DETENER</span>
+          </button>
 
-          <!-- Sección 3: Resumen de cuerpos de agua -->
-          <section class="comp-sec comp-sec-3">
-            <div class="water-summary">
-              <span class="ws-title">Cuerpos de agua</span>
-              <span class="ws-badge ws-perm">Permanente: <strong id="ws-perm">—</strong></span>
-              <span class="ws-badge ws-temp">Temporal: <strong id="ws-temp">—</strong></span>
-          </div>
-          </section>
-      
-          <!-- Sección 4: Gráficas (removida - ahora en panel flotante) -->
-          <section class="comp-sec comp-sec-4" style="display: none;">
-            <!-- Las gráficas ahora están en el panel flotante -->
-          </section>
+          <button id="comparador-refresh-btn" class="link-btn" onclick="actualizarComparadorBarra()" title="Refrescar visualización">
+            <i class="fas fa-sync"></i>
+          </button>
         </div>
       </div>
 
-      <!-- Botón para mostrar la barra cuando esté oculta -->
-      <button id="comparador-barra-show" class="comparador-barra-show" title="Mostrar comparador" aria-label="Mostrar comparador">
-        <i class="fas fa-water"></i>
-        <span>Comparar</span>
-      </button>
-      
+      <div class="date-centered comp-date-label" id="comparador-date-label"><span>Comparar períodos</span></div>
+
+      <!-- Modo BARRIDO: Izquierda / Derecha (año + temporada) -->
+      <div class="comparador-barra-selectores" id="comparador-selectores-swipe">
+        <div class="comparador-barra-col">
+          <label class="comp-col-title">Izquierda</label>
+          <div class="select-pair">
+            <select id="comparador-barra-year-left" class="comparador-select">
+              </select>
+            <select id="comparador-barra-season-left" class="comparador-select small">
+              <option value="Invierno">Invierno</option>
+              <option value="Primavera">Primavera</option>
+              <option value="Verano">Verano</option>
+              <option value="Otonio">Otoño</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="width: 1px; background: rgba(0,212,255,0.3); margin: 0 10px; height: 30px; align-self: center;"></div>
+
+        <div class="comparador-barra-col">
+          <label class="comp-col-title">Derecha</label>
+          <div class="select-pair">
+            <select id="comparador-barra-year-right" class="comparador-select">
+              </select>
+            <select id="comparador-barra-season-right" class="comparador-select small">
+              <option value="Invierno">Invierno</option>
+              <option value="Primavera">Primavera</option>
+              <option value="Verano" selected>Verano</option>
+              <option value="Otonio">Otoño</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modo ANIMAR: Año inicio / Año fin (secuencia en el tiempo) -->
+      <div class="comparador-barra-selectores comparador-selectores-animate" id="comparador-selectores-animate" style="display: none;">
+        <div class="comparador-barra-col">
+          <label class="comp-col-title">Año inicio</label>
+          <select id="comparador-animate-year-inicio" class="comparador-select">
+            </select>
+        </div>
+        <div style="width: 1px; background: rgba(0,212,255,0.3); margin: 0 10px; height: 30px; align-self: center;"></div>
+        <div class="comparador-barra-col">
+          <label class="comp-col-title">Año fin</label>
+          <select id="comparador-animate-year-fin" class="comparador-select">
+            </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="comp-sec comp-sec-3">
+      <div class="water-summary" style="align-items: center; width: 100%;">
+        <span class="ws-title" style="margin-bottom: 8px;">ANÁLISIS DE RIESGO</span>
+        
+        <button id="btn-riesgo-barra" 
+                onclick="toggleRiesgoBarra()" 
+                class="mode-btn" 
+                style="width: 100%; justify-content: center; border-color: #ff4444; color: #ffaaaa;">
+          <i class="fas fa-exclamation-triangle"></i> ZONAS NO APTAS
+        </button>
+      </div>
+    </section>
+
+    <div style="display: none;">
+      <select id="graficas-year-left"></select>
+      <select id="graficas-year-right"></select>
+    </div>
+
+  </div>
+</div>
+
+<button id="comparador-barra-show" class="comparador-barra-show" title="Mostrar comparador" aria-label="Mostrar comparador" style="display:none;">
+  <i class="fas fa-columns"></i>
+  <span>Comparar</span>
+</button>

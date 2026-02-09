@@ -5,16 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mapa de Agua Temporal - Tabasco 2020</title>
   
-  <!-- Font Awesome para iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   
-  <!-- Tu CSS base (si quieres mantener consistencia) -->
   <link rel="stylesheet" href="../Css/base.css">
   
-  <!-- CSS específico del mapa de agua -->
   <link rel="stylesheet" href="../Css/mapa-agua.css">
 </head>
 <body>
@@ -26,21 +22,17 @@
   <main class="contenedor-mapa">
     <div id="mapa-agua"></div>
     
-    <!-- Botón para resetear el zoom al nivel original -->
     <button id="reset-zoom-btn" type="button" title="Restaurar zoom original">
         <i class="fas fa-home"></i>
     </button>
     
     <aside id="panel-info">
-      <h2>Información del Proyecto</h2>
-      <p>Este mapa muestra los cuerpos de agua detectados durante las cuatro temporadas del año 2020 en los municipios de Balancán, Emiliano Zapata y Tenosique, Tabasco.</p>
-      
       <h3>Temporadas:</h3>
       <ul>
+        <li><strong>Invierno:</strong> Enero - Marzo</li>
         <li><strong>Primavera:</strong> Marzo - Junio</li>
         <li><strong>Verano:</strong> Junio - Septiembre</li>
         <li><strong>Otoño:</strong> Septiembre - Diciembre</li>
-        <li><strong>Invierno:</strong> Enero - Marzo</li>
       </ul>
       
       <h3>Metodología:</h3>
@@ -58,33 +50,45 @@
     <p>© 2025 - Proyecto de análisis hidrológico | Datos: Copernicus Sentinel-1</p>
   </footer>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
-  <!-- Tu código del mapa -->
+  <script src="../Js/wms-enhancer.js"></script>
+  
+  <script>
+    (function() {
+      // Coordenadas centradas en la región de los Ríos
+      var mapa = L.map('mapa-agua', { zoomControl: true }).setView([17.725, -91.457], 10);
+      
+      // Capa base OSM
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(mapa);
+      
+      // Exponer mapa globalmente para que otros scripts lo encuentren
+      window.mapa = mapa;
+      window.map = mapa;
+    })();
+  </script>
+  
   <script src="../Js/mapa-agua.js"></script>
   
-  <!-- Script para el botón de reset de zoom -->
   <script>
     window.addEventListener('load', function() {
       setTimeout(function() {
         var resetZoomBtn = document.getElementById('reset-zoom-btn');
         if (resetZoomBtn) {
           resetZoomBtn.addEventListener('click', function() {
-            // Buscar el mapa (puede tener diferentes nombres)
-            var mapInstance = window.mapa || window.map || buscarMapa();
+            var mapInstance = window.mapa || window.map;
             
             if (mapInstance && typeof mapInstance.setView === 'function') {
-              // Zoom y centro original de Tabasco
-              mapInstance.setView([17.668149360093285, -91.53945922851564], 9);
-            } else if (typeof window.resetView === 'function') {
-              window.resetView();
+              // Zoom y centro original
+              mapInstance.setView([17.725, -91.457], 10);
             } else {
               console.error('No se pudo encontrar el mapa para resetear el zoom');
             }
           });
         }
-      }, 2000);
+      }, 1000);
     });
   </script>
 </body>

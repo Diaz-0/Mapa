@@ -1,315 +1,241 @@
-# 🗺️ Mapa Coroplético Interactivo de Tabasco
+# Mapa Coroplético Interactivo de Tabasco
 
-Aplicación web interactiva para visualización de mapas coropléticos de Tabasco con funcionalidades avanzadas de análisis espacial, comparación de capas temporales y visualización de datos de agua.
+Aplicación web de Sistema de Información Geográfica (SIG) para la visualización interactiva de mapas coropléticos del estado de Tabasco, México. Incluye análisis espacial, comparación temporal de capas de agua mediante Sentinel-1 SAR y visualización de datos hidrológicos estacionales.
 
-## 📋 Tabla de Contenidos
+---
+
+## Tabla de contenidos
 
 - [Características](#características)
-- [Requisitos](#requisitos)
+- [Requisitos del sistema](#requisitos-del-sistema)
 - [Instalación](#instalación)
 - [Configuración](#configuración)
 - [Ejecución](#ejecución)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Uso](#uso)
-- [Troubleshooting](#troubleshooting)
-- [Contribución](#contribución)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Rutas de la aplicación](#rutas-de-la-aplicación)
+- [Solución de problemas](#solución-de-problemas)
+- [Tecnologías utilizadas](#tecnologías-utilizadas)
 - [Licencia](#licencia)
 
-## ✨ Características
+---
 
-- 🗺️ Visualización interactiva de mapas con Leaflet
-- 📊 Comparación lado a lado de capas temporales
-- 💧 Análisis de datos de agua por temporada y año
-- 📈 Gráficas interactivas con Chart.js
-- 🎨 Interfaz moderna con efectos futuristas
-- 🔍 Herramientas de dibujo y medición
-- 🗺️ Mini mapa de navegación
-- 📱 Diseño responsive
+## Características
 
-## 📦 Requisitos
+| Funcionalidad | Descripción |
+|---------------|-------------|
+| **Mapa principal** | Visualización de municipios de Tabasco con subregiones (Centro, Chontalpa, Sierra, Pantanos, Ríos) |
+| **Capas base** | OpenStreetMap, Google Satellite/Hybrid, Esri, Stadia, Thunderforest, CartoDB |
+| **Agua temporal** | Capas WMS por temporada (Invierno, Primavera, Verano, Otoño) clasificadas con Sentinel-1 SAR |
+| **Comparador** | Vista lado a lado con barrido o animación entre años/temporadas |
+| **Gráficas** | Evolución temporal (temporadas, inundación) con Chart.js |
+| **Herramientas** | Dibujo (Leaflet.draw), minimapa, panel de estadísticas, overlay Meteoblue |
+| **Interfaz** | Tema futurista, diseño responsive, panel lateral colapsable |
 
-### Requisitos Mínimos
+---
 
-- **Node.js**: 14.x o superior (recomendado: 18.x LTS)
-- **npm**: Incluido con Node.js
-- **Navegador web moderno**: Chrome 90+, Firefox 88+, Edge 90+, Safari 14+
-- **GeoServer**: 2.20.x o superior (para capas WMS)
-- **RAM**: Mínimo 4 GB (recomendado: 8 GB)
+## Requisitos del sistema
 
-### Requisitos Opcionales
+- **Node.js** 14.x o superior (recomendado: 18.x LTS)
+- **npm** 6.0 o superior
+- **GeoServer** 2.20.x o superior (para capas WMS)
+- **Navegador** Chrome 90+, Firefox 88+, Edge 90+ o Safari 14+
+- **RAM** 4 GB mínimo (8 GB recomendado)
 
-- **Apache HTTP Server**: Para producción
-- **Git**: Para clonar el repositorio
+Para requisitos detallados, consulte `requisitos.txt`.
 
-> 📄 Ver archivo `requisitos.txt` para información detallada de requisitos.
+---
 
-## 🚀 Instalación
+## Instalación
 
-### Paso 1: Clonar el Repositorio
+### 1. Clonar o descargar el repositorio
 
 ```bash
 git clone https://github.com/Diaz-0/Mapa.git
 cd Leaflet
 ```
 
-O si ya tienes el proyecto descargado, navega a la carpeta del proyecto.
-
-### Paso 2: Instalar Dependencias de Node.js
+### 2. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-Esto instalará Express y todas sus dependencias en la carpeta `node_modules/`.
-
-### Paso 3: Verificar Instalación
+### 3. Verificar instalación
 
 ```bash
-node --version
+node --version   # Debe ser >= 14.x
 npm --version
 ```
 
-Deberías ver las versiones de Node.js y npm instaladas.
+---
 
-## ⚙️ Configuración
+## Configuración
 
-### Configuración de GeoServer
+### GeoServer
 
-1. **Instalar GeoServer** desde https://geoserver.org/release/
-2. **Iniciar GeoServer** (por defecto en http://localhost:8080)
-3. **Crear Workspace** llamado `agua_tabasco`
-4. **Configurar CORS** en GeoServer para permitir peticiones desde tu dominio:
-   - Ve a: `Settings > Global Settings > CORS`
-   - Habilita CORS y agrega tu dominio a los orígenes permitidos
+1. Instale GeoServer desde [geoserver.org](https://geoserver.org/release/)
+2. Cree el workspace **`agua_subregion_rios`**
+3. Publique las capas raster (GeoTIFF) con nomenclatura: `S1_{año}_{temporada}_clasificado_filtrado`
+4. Aplique el estilo `agua_3clases` (ver `GeoServer/README_estilo_3clases.md`)
+5. Habilite CORS en *Settings > Global Settings > CORS*
 
-### Configuración de URLs
+### URLs personalizadas
 
-Si tu GeoServer está en una URL diferente, edita los siguientes archivos:
+Si GeoServer no está en `localhost:8080`, actualice:
 
-- `Js/wms-enhancer.js` (línea 11)
-- `Js/mapa-agua.js` (línea 3)
-- `Js/comparador-agua.js` (línea 3)
+- `Js/wms-enhancer.js` (líneas 8-9)
+- `Js/mapa-agua.js` (aguaConfig)
 
-Cambia `http://localhost:8080/geoserver/agua_tabasco/wms` por tu URL.
+---
 
-## ▶️ Ejecución
+## Ejecución
 
-### Opción 1: Usando Express (Recomendado para desarrollo)
-
-Si no tienes un archivo `server.js`, crea uno en la raíz del proyecto:
-
-```javascript
-// server.js
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Servir archivos estáticos
-app.use(express.static(__dirname));
-
-// Ruta principal
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Html', 'lef.html'));
-});
-
-app.listen(PORT, () => {
-    console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
-});
-```
-
-Luego ejecuta:
-
-```bash
-node server.js
-```
-
-O si prefieres usar `npm start`, agrega esto a `package.json`:
-
-```json
-{
-  "scripts": {
-    "start": "node server.js"
-  }
-}
-```
-
-Y ejecuta:
+### Con Express (recomendado)
 
 ```bash
 npm start
 ```
 
-### Opción 2: Usando Live Server (VS Code)
-
-1. Instala la extensión **Live Server** en VS Code
-2. Haz clic derecho en `Html/lef.html`
-3. Selecciona **"Open with Live Server"**
-
-### Opción 3: Usando Apache HTTP Server
-
-1. Copia el proyecto a la carpeta `htdocs` de Apache (o tu carpeta web)
-2. Asegúrate de que el módulo `mod_headers` esté habilitado
-3. El archivo `.htaccess` ya está configurado
-4. Accede a: `http://localhost/Html/lef.html`
-
-### Opción 4: Usando Python (Desarrollo rápido)
+O:
 
 ```bash
-# Python 3
-python -m http.server 8000
-
-# Python 2
-python -m SimpleHTTPServer 8000
+node server.js
 ```
 
-Luego accede a: `http://localhost:8000/Html/lef.html`
+Aplicación disponible en: **http://localhost:3000**
 
-## 📁 Estructura del Proyecto
+### Otras opciones
+
+| Método | Comando | URL |
+|--------|---------|-----|
+| Live Server (VS Code) | Extensión Live Server | `http://127.0.0.1:5500/Html/lef.html` |
+| Python HTTP | `python -m http.server 8000` | `http://localhost:8000/Html/lef.html` |
+| Apache | Copiar a `htdocs` | `http://localhost/Html/lef.html` |
+
+---
+
+## Estructura del proyecto
 
 ```
 Leaflet/
+├── Html/                    # Páginas y componentes
+│   ├── lef.html             # Aplicación principal
+│   ├── mapa-agua.html       # Mapa de agua (vista simplificada)
+│   ├── sidebar.html         # Panel lateral (cargado dinámicamente)
+│   ├── comparador-sidebar.html
+│   ├── efectos-futuristas.html
+│   └── graficas-panel.html
 │
-├── Css/                    # Estilos CSS modulares
-│   ├── base.css           # Estilos base
-│   ├── mapa.css           # Estilos del mapa
-│   ├── sidebar.css        # Estilos del sidebar
-│   └── ...
+├── Css/                     # Estilos modulares
+│   ├── base.css             # Layout y reset
+│   ├── mapa.css             # Controles Leaflet, leyendas
+│   ├── sidebar.css          # Panel lateral, capas
+│   ├── efectos-futuristas.css
+│   ├── radar.css
+│   ├── meteoblue.css
+│   ├── comparador-sidebar.css
+│   └── mapa-agua.css
 │
-├── Html/                   # Archivos HTML
-│   ├── lef.html           # Página principal
-│   ├── mapa-agua.html     # Mapa de agua
-│   └── ...
+├── Js/                      # Lógica de aplicación
+│   ├── index.js             # Municipios, capas base, info
+│   ├── wms-enhancer.js      # Cliente WMS, capas GeoServer
+│   ├── mapa-agua.js         # Leyenda y capas de agua
+│   ├── comparador-agua.js   # Comparador temporal, gráficas
+│   ├── datos-agua-loader.js # Carga CSV de estadísticas
+│   ├── efectos-futuristas.js
+│   ├── Dibujo_mnmapa.js     # Herramientas de dibujo
+│   └── Puntos.js            # Marcadores de interés
 │
-├── Js/                     # Archivos JavaScript
-│   ├── index.js           # Lógica principal
-│   ├── mapa-agua.js       # Funcionalidad de mapas de agua
-│   └── ...
+├── Layers/
+│   └── layer.js             # Inicialización mapa, capas base
 │
-├── GeoJSON/                # Archivos GeoJSON
-│   └── Tabasco.json       # Polígonos de municipios
+├── GeoJSON/
+│   └── Tabasco.json         # Polígonos de municipios
 │
-├── Data/                   # Datos CSV
-│   └── agua_tabasco_datos.csv
+├── Data/
+│   └── agua_tabasco_datos.csv   # Estadísticas por temporada/año
 │
-├── Plugins/                # Bibliotecas locales
-│   └── leaflet.js         # Leaflet core
+├── GeoServer/
+│   ├── agua_3clases.sld     # Estilo SLD (3 clases)
+│   └── README_estilo_3clases.md
 │
-├── Layers/                 # Configuración de capas
-│   └── layer.js
+├── Plugins/                 # Leaflet y assets
+│   ├── leaflet.js
+│   ├── leaflet.css
+│   └── images/
 │
-├── .gitignore             # Archivos ignorados por Git
-├── package.json           # Dependencias de Node.js
-├── package-lock.json      # Lock de dependencias
-├── requisitos.txt        # Requisitos del sistema
-└── README.md             # Este archivo
+├── server.js                # Servidor Express
+├── package.json
+├── requisitos.txt
+└── README.md
 ```
 
-## 🎮 Uso
+---
 
-### Página Principal (lef.html)
+## Rutas de la aplicación
 
-1. Abre `Html/lef.html` en tu navegador
-2. El mapa se carga automáticamente centrado en Tabasco
-3. Usa los controles del sidebar para:
-   - Seleccionar capas del mapa
-   - Cambiar estilos de visualización
-   - Activar herramientas de dibujo
-   - Ver información de municipios
+| Ruta | Página | Descripción |
+|------|--------|-------------|
+| `/` | lef.html | Aplicación principal con mapa completo |
+| `/lef` | lef.html | Igual que `/` |
+| `/mapa-agua` | mapa-agua.html | Vista simplificada de agua temporal |
+| `/comparador` | comparador-sidebar.html | Fragmento del comparador (sirve HTML completo) |
 
-### Comparador de Capas
+---
 
-1. Abre `Html/comparador-sidebar.html`
-2. Selecciona dos capas temporales diferentes
-3. Usa el control deslizante para comparar visualmente
+## Solución de problemas
 
-### Mapa de Agua
+### GeoServer no responde
 
-1. Abre `Html/mapa-agua.html`
-2. Selecciona temporada y año
-3. Visualiza los datos de agua por municipio
+- Verifique que GeoServer esté en ejecución en `http://localhost:8080`
+- Confirme que el workspace `agua_subregion_rios` exista
+- Revise la configuración CORS en GeoServer
 
-## 🔧 Troubleshooting
+### Error CORS en el navegador
 
-### Error: "GeoServer no responde"
+- En GeoServer: *Settings > Global Settings > CORS*: habilitar y agregar el origen de la aplicación
 
-- Verifica que GeoServer esté ejecutándose en `http://localhost:8080`
-- Revisa la configuración de CORS en GeoServer
-- Verifica que el workspace `agua_tabasco` exista
+### Capas WMS no aparecen
 
-### Error: "CORS bloqueado"
+- Consulte la consola del navegador (F12) para errores de red
+- Verifique que los nombres de capas coincidan con la configuración en GeoServer
+- Asegúrese de que el estilo `agua_3clases` esté asociado a las capas
 
-- Configura CORS en GeoServer:
-  - Settings > Global Settings > CORS
-  - Habilita CORS y agrega tu dominio
-
-### Los mapas no cargan
-
-- Verifica tu conexión a Internet (se necesitan recursos de CDN)
-- Revisa la consola del navegador (F12) para errores
-- Asegúrate de que los archivos CSS y JS estén en las rutas correctas
-
-### Puerto 3000 ya está en uso
+### Puerto 3000 en uso
 
 ```bash
 # Windows
 netstat -ano | findstr :3000
 taskkill /PID <PID> /F
 
-# Linux/Mac
+# Linux/macOS
 lsof -ti:3000 | xargs kill
 ```
 
-O cambia el puerto en `server.js`:
-
-```javascript
-const PORT = process.env.PORT || 3001; // Cambia a otro puerto
-```
-
-### node_modules no se encuentra
-
-```bash
-npm install
-```
-
-## 🤝 Contribución
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📝 Notas Adicionales
-
-- El archivo `GeoJSON/georef-mexico-municipality-millesime@public.json` está excluido del repositorio por su tamaño (188.94 MB). Si lo necesitas, puedes usar Git LFS o agregarlo manualmente.
-
-- Para producción, se recomienda:
-  - Usar un servidor web robusto (Apache/Nginx)
-  - Configurar HTTPS
-  - Optimizar imágenes y recursos
-  - Usar un CDN para recursos estáticos
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detalles.
-
-## 👤 Autor
-
-**Diaz-0**
-
-- GitHub: [@Diaz-0](https://github.com/Diaz-0)
-
-## 🙏 Agradecimientos
-
-- Leaflet - Biblioteca de mapas interactivos
-- GeoServer - Servidor de datos geoespaciales
-- Chart.js - Biblioteca de gráficas
-- Todos los contribuidores de las bibliotecas utilizadas
+O defina otra variable de entorno: `PORT=3001 npm start`
 
 ---
 
-⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub.
+## Tecnologías utilizadas
 
+| Componente | Tecnología |
+|------------|------------|
+| Mapas | Leaflet 1.9.x |
+| Servidor | Node.js, Express 4.18 |
+| Capas WMS | GeoServer |
+| Datos espaciales | GeoJSON, Sentinel-1 SAR |
+| Gráficas | Chart.js 4.4 |
+| UI | Font Awesome 6, Google Fonts (Orbitron, Montserrat) |
+| Plugins Leaflet | Side-by-Side, Draw, MiniMap |
+
+---
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detalles.
+
+---
+
+## Autor
+
+**Diaz-0** — [GitHub](https://github.com/Diaz-0)

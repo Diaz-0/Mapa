@@ -1,12 +1,9 @@
-<!-- Efecto de partículas -->
 <canvas id="particles"></canvas>
 
-<!-- Título futurista -->
 <div class="title-header">
     <i class="fas fa-satellite"></i> SISTEMA DE MONITOREO - TABASCO
 </div>
 
-<!-- Panel de estadísticas -->
 <div class="stats-panel">
     <div class="stats-header" onclick="toggleStatsPanel()">
         <h3 style="margin: 0; font-size: 14px; text-transform: uppercase; text-align: center; letter-spacing: 1px; text-shadow: 0 0 10px #00ffe7; color: #00ffe7; font-weight: bold; flex: 1;">
@@ -14,22 +11,27 @@
         </h3>
         <span class="stats-toggle" id="stats-toggle">▼</span>
     </div>
+    
     <div class="stats-content" id="stats-content">
-    <div class="stats-item">
-        <span>Municipios:</span>
-        <span class="stats-value">17</span>
-    </div>
-    <div class="stats-item">
-        <span>Subregiones:</span>
-        <span class="stats-value">5</span>
-    </div>
-    <div class="stats-item">
-        <span>Área Total:</span>
-        <span class="stats-value">24,738 km²</span>
-    </div>
-    <div class="stats-item">
-        <span>Estado del Sistema:</span>
-        <span class="stats-value" style="color: #00ff00;"><i class="fas fa-circle" style="font-size: 8px; animation: pulse 1.5s infinite;"></i> ACTIVO</span>
-    </div>
+        <div class="stats-item">
+            <span>Municipios:</span>
+            <span class="stats-value">17</span>
+        </div>
+        
+        <div class="stats-item">
+            <span>Latitud:</span>
+            <span class="stats-value" id="currentLat">--</span>
+        </div>
+        <div class="stats-item">
+            <span>Longitud:</span>
+            <span class="stats-value" id="currentLng">--</span>
+        </div>
+
+        <div class="stats-item">
+            <span>Estado del Sistema:</span>
+            <span class="stats-value" style="color: #00ff00;">
+                <i class="fas fa-circle" style="font-size: 8px; animation: pulse 1.5s infinite;"></i> ACTIVO
+            </span>
+        </div>
     </div>
 </div>

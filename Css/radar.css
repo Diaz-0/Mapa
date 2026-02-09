@@ -1,44 +1,30 @@
-/* Panel de radar integrado en la sidebar */
+/* =========================================
+   ESTILOS DEL SISTEMA DE RADAR (SIDEBAR)
+   ========================================= */
+
+/* Contenedor del radar dentro de la sidebar */
 .radar-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
+    padding: 10px 0;
+    width: 100%;
 }
 
-.radar-panel {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, rgba(0, 255, 231, 0.15) 0%, rgba(0, 255, 231, 0.05) 100%);
-    border: 2px solid #00ffe7;
-    border-radius: 16px;
-    padding: 20px;
-    z-index: 1000;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 0 40px rgba(0, 255, 231, 0.4);
-    width: 200px;
-    height: 180px;
-    animation: glow 2s ease-in-out infinite alternate;
-    display: none; /* Ocultar el panel flotante */
-}
-
-.radar-panel:hover {
-    box-shadow: 0 0 50px rgba(0, 255, 231, 0.6);
-}
-
+/* Pantalla del radar (Círculo principal) */
 .radar-screen {
-    width: 100px;
-    height: 100px;
+    width: 120px; /* Tamaño ajustado para visibilidad */
+    height: 120px;
     border: 2px solid #00ffe7;
     border-radius: 50%;
     position: relative;
-    margin: 0 auto 10px auto;
-    background: radial-gradient(circle, rgba(0, 255, 231, 0.1) 0%, transparent 70%);
-    box-shadow: inset 0 0 30px rgba(0, 255, 231, 0.3);
+    margin: 0 auto 15px auto;
+    background: radial-gradient(circle, rgba(0, 255, 231, 0.15) 0%, transparent 70%);
+    box-shadow: 0 0 15px rgba(0, 255, 231, 0.2), inset 0 0 20px rgba(0, 255, 231, 0.2);
     overflow: hidden;
 }
 
+/* Retícula del radar (Grid de fondo) */
 .radar-grid {
     position: absolute;
     top: 0;
@@ -46,68 +32,79 @@
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle, transparent 65%, rgba(0, 255, 231, 0.05) 65%),
-        linear-gradient(0deg, transparent 49%, rgba(0, 255, 231, 0.05) 49%, rgba(0, 255, 231, 0.05) 51%, transparent 51%),
-        linear-gradient(90deg, transparent 49%, rgba(0, 255, 231, 0.05) 49%, rgba(0, 255, 231, 0.05) 51%, transparent 51%);
+        radial-gradient(circle, transparent 65%, rgba(0, 255, 231, 0.15) 66%),
+        linear-gradient(0deg, transparent 49%, rgba(0, 255, 231, 0.1) 49%, rgba(0, 255, 231, 0.1) 51%, transparent 51%),
+        linear-gradient(90deg, transparent 49%, rgba(0, 255, 231, 0.1) 49%, rgba(0, 255, 231, 0.1) 51%, transparent 51%);
+    pointer-events: none;
 }
 
+/* Barrido del radar (Línea giratoria) */
 .radar-sweep {
-    width: 2px;
-    height: 50px;
-    background: linear-gradient(to top, transparent, #00ffe7);
     position: absolute;
     top: 50%;
     left: 50%;
-    transform-origin: bottom center;
+    width: 50%; /* Radio del círculo */
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0, 255, 231, 0) 0%, #00ffe7 100%);
+    transform-origin: 0% 50%; /* Girar desde el extremo izquierdo (centro del radar) */
     animation: sweep 3s linear infinite;
-    filter: drop-shadow(0 0 5px #00ffe7);
+    box-shadow: 0 0 8px #00ffe7;
 }
 
 @keyframes sweep {
-    0% { transform: translate(-50%, -100%) rotate(0deg); }
-    100% { transform: translate(-50%, -100%) rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
+/* Puntos detectados (Objetivos) */
 .radar-dot {
     width: 6px;
     height: 6px;
     background: #ff073a;
     border-radius: 50%;
     position: absolute;
-    box-shadow: 0 0 12px #ff073a;
-    animation: pulse 1.5s ease-in-out infinite;
-    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #ff073a;
+    animation: pulse 1s ease-in-out infinite alternate;
+    transform: translate(-50%, -50%); /* Centrar el punto en su coordenada */
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.5); }
+    0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.8); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
 }
 
+/* Texto y Etiquetas */
 .radar-label {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     font-size: 11px;
     font-weight: 700;
     color: #00ffe7;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px #00ffe7;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 10px rgba(0, 255, 231, 0.6);
+    font-family: 'Orbitron', sans-serif;
 }
 
+.radar-label i {
+    margin-right: 5px;
+}
+
+/* Estadísticas debajo del radar */
 .radar-stats {
     width: 100%;
-    margin-top: 10px;
+    padding: 0 5px;
 }
 
 .radar-stat-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 10px;
-    color: #ffffff;
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(0, 255, 231, 0.2);
+    margin-bottom: 6px;
+    font-size: 11px;
+    color: #a8dadc;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed rgba(0, 255, 231, 0.2);
+    font-family: 'Montserrat', sans-serif;
 }
 
 .radar-stat-item:last-child {
@@ -116,8 +113,12 @@
 
 .radar-stat-value {
     color: #00ffe7;
-    text-shadow: 0 0 5px #00ffe7;
-    font-weight: 700;
-    font-size: 11px;
+    text-shadow: 0 0 5px rgba(0, 255, 231, 0.5);
+    font-weight: 600;
+    font-family: 'Orbitron', sans-serif;
 }
 
+/* Panel Flotante (Legacy / Oculto por seguridad) */
+.radar-panel {
+    display: none !important;
+}

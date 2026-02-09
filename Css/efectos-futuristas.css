@@ -1,460 +1,284 @@
-/* Fondo de partículas - oculto por defecto */
+/* =========================================
+   EFECTOS VISUALES Y PANELES FLOTANTES
+   ========================================= */
+
+/* --- FONDO DE PARTÍCULAS --- */
 #particles {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	pointer-events: none;
-	z-index: 500;
-	display: none; /* Oculto por defecto para no estorbar al cargar */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 500;
+    display: none; /* JS lo activa si es necesario */
 }
 
-/* Título futurista superior */
+/* --- TÍTULO SUPERIOR --- */
 .title-header {
-	position: fixed;
-	top: 12px;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 12px 18px;
-	border: 1px solid rgba(0, 212, 255, 0.45);
-	border-radius: 8px;
-	background: rgba(5, 10, 25, 0.6);
-	backdrop-filter: blur(4px);
-	box-shadow: 0 0 12px rgba(0, 255, 231, 0.25), inset 0 0 8px rgba(0, 212, 255, 0.2);
-	color: #00d4ff;
-	font-family: 'Orbitron', sans-serif;
-	font-size: 24px;
-	letter-spacing: 1px;
-	text-shadow: 0 0 8px rgba(0, 255, 231, 0.35);
-	z-index: 3000;
-	user-select: none;
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 24px;
+    border: 1px solid rgba(0, 212, 255, 0.45);
+    border-radius: 8px;
+    background: rgba(5, 10, 25, 0.7);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 15px rgba(0, 255, 231, 0.2), inset 0 0 10px rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 255, 231, 0.5);
+    z-index: 3000;
+    user-select: none;
+    pointer-events: none;
 }
 
-/* Panel de estadísticas flotante */
+/* --- PANEL DE ESTADÍSTICAS (Derecha Superior) --- */
 .stats-panel {
-	position: fixed;
-	right: 16px;
-	top: 16px;
-	width: 280px;
-	max-width: calc(100vw - 32px);
-	border: 1px solid rgba(0, 212, 255, 0.4);
-	border-radius: 12px;
-	background: rgba(5, 10, 25, 0.7);
-	backdrop-filter: blur(6px);
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 16px rgba(0, 255, 231, 0.2);
-	color: #dff9ff;
-	z-index: 3000;
-	overflow: hidden;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    width: 200px;
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 10px;
+    background: rgba(5, 10, 25, 0.85);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 212, 255, 0.15);
+    color: #dff9ff;
+    z-index: 3000;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
 }
 
 .stats-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 8px;
-	padding: 10px 12px;
-	background: linear-gradient(180deg, rgba(0, 212, 255, 0.08), rgba(0, 212, 255, 0));
-	border-bottom: 1px solid rgba(0, 212, 255, 0.25);
-	cursor: pointer;
-	user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    cursor: pointer;
+    user-select: none;
 }
 
-#stats-toggle {
-	color: #00ffe7;
-	font-family: 'Orbitron', sans-serif;
-	font-size: 12px;
+.stats-header h3 {
+    margin: 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #00ffe7;
+}
+
+.stats-toggle {
+    color: #00ffe7;
+    font-size: 10px;
 }
 
 .stats-content {
-	padding: 10px 12px 12px;
-	display: block; /* visible por defecto, el JS alterna display */
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-/* Estado oculto del contenido de estadísticas */
-.stats-content.hidden {
-	display: none;
-}
+.stats-content.hidden { display: none; }
 
 .stats-item {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 6px 0;
-	border-bottom: 1px dashed rgba(0, 212, 255, 0.18);
-	font-family: 'Montserrat', sans-serif;
-	font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    border-bottom: 1px dashed rgba(0, 212, 255, 0.15);
+    padding-bottom: 4px;
 }
 
-.stats-item:last-child {
-	border-bottom: none;
-}
+.stats-item:last-child { border: none; padding-bottom: 0; }
 
 .stats-value {
-	color: #00ffe7;
-	font-weight: 600;
-	text-shadow: 0 0 8px rgba(0, 255, 231, 0.35);
+    color: #00ffe7;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    text-shadow: 0 0 5px rgba(0, 255, 231, 0.4);
 }
 
-/* Panel flotante de gráficas */
+/* --- PANEL DE GRÁFICAS (Flotante) --- */
 .graficas-panel {
-	position: fixed;
-	right: 16px;
-	top: 80px; /* Debajo del panel de estadísticas */
-	width: 500px;
-	max-width: calc(100vw - 32px);
-	border: 1px solid rgba(0, 212, 255, 0.4);
-	border-radius: 12px;
-	background: rgba(5, 10, 25, 0.85);
-	backdrop-filter: blur(6px);
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 16px rgba(0, 255, 231, 0.2);
-	color: #dff9ff;
-	z-index: 10000; /* Siempre encima de todo */
-	overflow: hidden;
-	display: none; /* Oculto por defecto */
-	user-select: none;
+    position: fixed;
+    right: 20px;
+    top: 240px; /* Debajo de stats */
+    width: 480px;
+    max-width: 90vw;
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    border-radius: 10px;
+    background: rgba(13, 27, 42, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 212, 255, 0.2);
+    color: #dff9ff;
+    z-index: 10000;
+    overflow: hidden;
+    display: none; /* Controlado por botón */
+    user-select: none;
 }
 
 .graficas-panel.visible {
-	display: block;
+    display: block;
+    animation: slideIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Minimizado: solo se muestra la barra del título, el contenido se oculta */
+.graficas-panel.minimized .graficas-content {
+    display: none;
+}
+
+.graficas-panel.minimized .graficas-header {
+    border-bottom: none;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .graficas-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 8px;
-	padding: 10px 12px;
-	background: linear-gradient(180deg, rgba(0, 212, 255, 0.08), rgba(0, 212, 255, 0));
-	border-bottom: 1px solid rgba(0, 212, 255, 0.25);
-	cursor: move;
-	user-select: none;
-	transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.2) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    cursor: move;
 }
 
-.graficas-header.dragging {
-	cursor: grabbing;
-	background: linear-gradient(180deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
+.graficas-header h3 {
+    margin: 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #00ffe7;
+    letter-spacing: 1px;
 }
 
-.graficas-header:hover {
-	background: linear-gradient(180deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
-}
-
-/* Controles de ventana del panel */
-.graficas-window-controls {
-	display: flex;
-	gap: 4px;
-	align-items: center;
-}
+/* Controles de ventana (Iconos CSS Puros) */
+.graficas-window-controls { display: flex; gap: 6px; }
 
 .graficas-control-btn {
-	width: 28px;
-	height: 28px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: none;
-	background: transparent;
-	color: #a8dadc;
-	cursor: pointer;
-	border-radius: 4px;
-	transition: all 0.2s ease;
-	padding: 0;
-	font-size: 14px;
-	line-height: 1;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
 }
 
-.graficas-control-btn:hover {
-	background: rgba(255, 255, 255, 0.1);
-}
+.graficas-control-btn:hover { background: rgba(0, 212, 255, 0.3); border-color: #00d4ff; }
+.graficas-minimize:hover { background: rgba(255, 193, 7, 0.3); border-color: #ffc107; }
 
-.graficas-control-btn .control-icon {
-	display: block;
-	width: 100%;
-	height: 100%;
-	position: relative;
-	user-select: none;
-}
-
-/* Icono de minimizar (línea horizontal) */
-.minimize-icon::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 10px;
-	height: 1px;
-	background: currentColor;
-}
-
-/* Icono de maximizar (dos cuadrados) */
+/* Icono Maximizar (Cuadrado) */
 .maximize-icon::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 9px;
-	height: 9px;
-	border: 1px solid currentColor;
-	background: transparent;
+    content: ''; position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 8px; height: 8px;
+    border: 1.5px solid #fff;
 }
 
-.maximize-icon::after {
-	content: '';
-	position: absolute;
-	top: 35%;
-	left: 60%;
-	width: 7px;
-	height: 7px;
-	border: 1px solid currentColor;
-	border-top: none;
-	border-left: none;
-	background: transparent;
+/* Icono Minimizar (Línea horizontal) */
+.minimize-icon::before {
+    content: ''; position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 10px; height: 1.5px; background: #fff;
 }
 
-/* Icono de restaurar (dos cuadrados superpuestos) */
-.restore-icon::before {
-	content: '';
-	position: absolute;
-	top: 45%;
-	left: 45%;
-	transform: translate(-50%, -50%);
-	width: 7px;
-	height: 7px;
-	border: 1px solid currentColor;
-	border-top: none;
-	border-left: none;
-	background: transparent;
+/* Contenido Gráficas */
+.graficas-content { padding: 15px; }
+
+.graficas-type-selector, .graficas-selectors {
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+    padding-bottom: 10px;
 }
 
-.restore-icon::after {
-	content: '';
-	position: absolute;
-	top: 55%;
-	left: 55%;
-	transform: translate(-50%, -50%);
-	width: 7px;
-	height: 7px;
-	border: 1px solid currentColor;
-	border-bottom: none;
-	border-right: none;
-	background: transparent;
-}
+.graficas-selectors { display: flex; gap: 15px; }
+.grafica-selector-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
 
-/* Icono de cerrar (X) */
-.close-icon::before,
-.close-icon::after {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 10px;
-	height: 1px;
-	background: currentColor;
-}
-
-.close-icon::before {
-	transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.close-icon::after {
-	transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.graficas-minimize:hover {
-	background: rgba(255, 255, 255, 0.15);
-}
-
-.graficas-maximize:hover {
-	background: rgba(255, 255, 255, 0.15);
-}
-
-.graficas-close:hover {
-	background: rgba(255, 77, 77, 0.3);
-	color: #ff4d4d;
-}
-
-.graficas-close:hover .control-icon {
-	color: #ff4d4d;
-}
-
-.graficas-content {
-	padding: 12px;
-	display: block;
-}
-
-/* Selector de tipo de gráfica */
-.graficas-type-selector {
-	margin-bottom: 12px;
-	padding-bottom: 12px;
-	border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-}
-
-.graficas-type-selector label {
-	color: #a8dadc;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 11px;
-	font-weight: 600;
-	display: block;
-	margin-bottom: 6px;
-}
-
-/* Selectores de año para las gráficas */
-.graficas-selectors {
-	display: flex;
-	gap: 12px;
-	margin-bottom: 12px;
-	padding-bottom: 12px;
-	border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-}
-
-.grafica-selector-group {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
-
-.grafica-selector-group label {
-	color: #a8dadc;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 11px;
-	font-weight: 600;
+label {
+    font-size: 10px; color: #a8dadc;
+    font-family: 'Montserrat', sans-serif; font-weight: 600; text-transform: uppercase;
 }
 
 .graficas-select {
-	padding: 6px 10px;
-	border: 1px solid rgba(0, 212, 255, 0.4);
-	border-radius: 6px;
-	background: rgba(5, 10, 25, 0.8);
-	color: #00d4ff;
-	font-family: 'Orbitron', sans-serif;
-	font-size: 11px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	outline: none;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #fff;
+    padding: 6px;
+    border-radius: 4px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    outline: none;
+    cursor: pointer;
 }
+.graficas-select option { background: #0d1b2a; }
 
-.graficas-select:hover {
-	border-color: rgba(0, 212, 255, 0.7);
-	background: rgba(0, 212, 255, 0.1);
-	box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
-}
-
-.graficas-select:focus {
-	border-color: rgba(0, 212, 255, 1);
-	background: rgba(0, 212, 255, 0.15);
-	box-shadow: 0 0 12px rgba(0, 212, 255, 0.5);
-}
-
-.graficas-select option {
-	background: rgba(5, 10, 25, 0.95);
-	color: #00d4ff;
-}
-
-.graficas-content.hidden {
-	display: none;
-}
-
-.graficas-container {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-}
-
+.graficas-container { display: flex; flex-direction: column; gap: 15px; }
 .grafica-item {
-	flex: 1;
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+    padding: 10px;
+    border: 1px solid rgba(0,212,255,0.1);
 }
+.grafica-item label { text-align: center; color: #00d4ff; margin-bottom: 8px; display: block; }
+canvas { width: 100% !important; height: 160px !important; }
 
-.grafica-item label {
-	display: block;
-	color: #00d4ff;
-	font-family: 'Orbitron', sans-serif;
-	font-size: 11px;
-	margin-bottom: 8px;
-	text-align: center;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-}
-
-.grafica-item canvas {
-	max-width: 100%;
-	height: auto !important;
-	max-height: 200px;
-}
-
-/* Botón flotante para gráficas */
+/* --- BOTÓN FLOTANTE ACTIVAR GRÁFICAS (oculto, no se usa) --- */
 #toggle-graficas-btn {
-	position: absolute;
-	top: 55px;
-	left: 272px; /* Posición cuando el sidebar está abierto */
-	z-index: 1301; /* Encima del botón de Meteoblue */
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	padding: 10px 14px;
-	border: 2px solid #00d4ff;
-	border-radius: 8px;
-	cursor: pointer;
-	background: linear-gradient(180deg, #0d1b2a 0%, #1a1a2e 50%, #16213e 100%);
-	backdrop-filter: blur(8px);
-	color: #00d4ff;
-	box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 212, 255, 0.3), inset 0 0 6px rgba(0, 212, 255, 0.1);
-	transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease, left 0.3s ease;
-	max-width: 140px;
-	white-space: nowrap;
-	font-size: 13px;
-	font-family: 'Orbitron', 'Montserrat', Arial, sans-serif;
-	text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+    display: none !important;
+    position: absolute;
+    /* Posición vertical alineada debajo de Meteoblue (15px + 35px altura + 10px gap = 60px) */
+    top: 60px;
+    left: 20px; /* Estado inicial (sidebar cerrado) */
+    z-index: 1300;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    border-radius: 6px;
+    cursor: pointer;
+    background: rgba(13, 27, 42, 0.9);
+    backdrop-filter: blur(6px);
+    color: #00d4ff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 12px;
+    font-family: 'Orbitron', sans-serif;
 }
 
-/* Mover el botón de gráficas cuando el sidebar está abierto */
-body.sidebar-open #toggle-graficas-btn {
-	left: 272px !important;
-	transition: left 0.3s ease;
-}
-
-/* Mover el botón de gráficas cuando el sidebar está cerrado */
-body:not(.sidebar-open) #toggle-graficas-btn {
-	left: calc(272px - 245px) !important; /* 27px cuando el sidebar está cerrado */
-	transition: left 0.3s ease;
-}
-
-#toggle-graficas-btn i {
-	font-size: 14px;
-	filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.6));
-	color: #00d4ff;
-}
+#toggle-graficas-btn i { font-size: 14px; }
 
 #toggle-graficas-btn:hover {
-	transform: translateY(-1px) scale(1.03);
-	box-shadow: 4px 6px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 212, 255, 0.5), inset 0 0 8px rgba(0, 212, 255, 0.15);
-	border-color: #00d4ff;
-	background: linear-gradient(180deg, #0f1f32 0%, #1e2a42 50%, #182542 100%);
-	text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
-}
-
-#toggle-graficas-btn:active {
-	transform: translateY(0) scale(0.97);
-}
-
-#toggle-graficas-btn:focus-visible {
-	outline: none;
-	box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 212, 255, 0.7), 0 0 0 3px rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 255, 231, 0.2);
+    border-color: #00ffe7;
+    color: #00ffe7;
 }
 
 #toggle-graficas-btn.active {
-	background: linear-gradient(180deg, rgba(13, 27, 42, 0.95) 0%, rgba(26, 26, 46, 0.9) 100%);
-	border-color: #00d4ff;
-	border-width: 2px;
-	top: 8px;
-	transform: scale(0.95);
-	opacity: 1;
-	max-width: 135px;
-	padding: 12px 14px;
-	box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 212, 255, 0.4), inset 0 0 6px rgba(0, 212, 255, 0.1);
+    background: linear-gradient(135deg, rgba(0, 51, 102, 0.9) 0%, rgba(0, 26, 51, 0.9) 100%);
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+/* Movimiento coordinado con Sidebar (245px ancho + 20px margen original = 265px) */
+body.sidebar-open #toggle-graficas-btn {
+    left: 265px !important;
+}
+
+body:not(.sidebar-open) #toggle-graficas-btn {
+    left: 20px !important;
 }

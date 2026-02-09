@@ -1,111 +1,174 @@
-/* Estilos específicos para el mapa de agua */
+/* =========================================
+   ESTILOS PARA EL MAPA DE AGUA (PÁGINA SECUNDARIA)
+   ========================================= */
+
+/* Estilos base específicos para esta página */
+/* Nota: Si se carga base.css antes, estos estilos sobrescribirán los defaults */
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f4f8;
-  }
-  
-  header {
-    background: linear-gradient(135deg, #0f766e, #14b8a6);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-  
-  header h1 {
-    margin: 0 0 8px 0;
-    font-size: 2em;
-  }
-  
-  header p {
-    margin: 0;
-    font-size: 1em;
-    opacity: 0.9;
-  }
-  
-  /* Contenedor principal */
-  .contenedor-mapa {
-    display: flex;
-    margin: 20px;
-    gap: 20px;
-    height: calc(100vh - 180px);
-  }
-  
-  /* Mapa */
-  #mapa-agua {
-    flex: 3;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    z-index: 1;
-  }
-  
-  /* Panel lateral */
-  #panel-info {
-    flex: 1;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    overflow-y: auto;
-    max-width: 350px;
-  }
-  
-  #panel-info h2 {
-    color: #0f766e;
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.5em;
-    border-bottom: 3px solid #14b8a6;
-    padding-bottom: 8px;
-  }
-  
-  #panel-info h3 {
-    color: #0f766e;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    font-size: 1.2em;
-  }
-  
-  #panel-info ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  #panel-info li {
-    margin: 10px 0;
-    padding: 12px;
-    background: #f0fdfa;
-    border-left: 4px solid #14b8a6;
-    border-radius: 4px;
-    transition: transform 0.2s;
-  }
-  
-  #panel-info li:hover {
-    transform: translateX(5px);
-    background: #ccfbf1;
-  }
-  
-  footer {
-    background: #0f766e;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    margin-top: 0;
-  }
-  
-  
-  /* Estilos para controles de Leaflet */
-  .leaflet-control-layers {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    padding: 10px;
-  }
-  
-  .leaflet-control-layers-toggle {
-    background-size: 20px 20px;
-  }
-  
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f4f8;
+  color: #1e293b;
+}
+
+/* Header simple y limpio */
+header {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0 0 5px 0;
+  font-size: 1.8em;
+  font-weight: 700;
+}
+
+header p {
+  margin: 0;
+  font-size: 0.95em;
+  opacity: 0.9;
+}
+
+/* Contenedor Flex para Mapa + Panel */
+.contenedor-mapa {
+  display: flex;
+  margin: 20px;
+  gap: 20px;
+  /* Altura calculada: 100vh - header - footer - márgenes */
+  height: calc(100vh - 160px); 
+}
+
+/* Mapa Leaflet */
+#mapa-agua {
+  flex: 3;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 1;
+  border: 1px solid #e2e8f0;
+}
+
+/* Panel de Información Lateral */
+#panel-info {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow-y: auto;
+  max-width: 320px;
+  border: 1px solid #e2e8f0;
+}
+
+#panel-info h3 {
+  color: #0f766e;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  font-size: 1.1em;
+  border-bottom: 2px solid #ccfbf1;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#panel-info h3:first-child {
+  margin-top: 0;
+}
+
+#panel-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#panel-info li {
+  margin: 8px 0;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-left: 4px solid #94a3b8;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+}
+
+/* Colores dinámicos para la lista */
+#panel-info li:hover {
+  transform: translateX(3px);
+  background: #f0f9ff;
+  border-left-color: #0ea5e9;
+}
+
+#panel-info li strong {
+  color: #334155;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Footer */
+footer {
+  background: #0f766e;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin-top: 0;
+  font-size: 0.85em;
+}
+
+/* Leyenda personalizada sobre el mapa */
+.leyenda-agua {
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 10px;
+  line-height: 1.4;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.leyenda-agua h4 {
+  margin: 0 0 5px 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: #0f766e;
+  text-transform: uppercase;
+}
+
+.leyenda-agua i {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+  vertical-align: middle;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 2px;
+}
+
+/* Botón de Reset Zoom específico para esta página */
+#reset-zoom-btn {
+  position: absolute;
+  top: 80px; /* Debajo de los controles de zoom default */
+  left: 10px;
+  z-index: 1000;
+  background: white;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 4px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+}
+
+#reset-zoom-btn:hover {
+  background: #f1f5f9;
+  color: #0f766e;
+}

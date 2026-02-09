@@ -1,102 +1,135 @@
 ================================================================================
-                    REQUISITOS DEL SISTEMA
-                    Mapa Coroplético Interactivo de Tabasco
+         REQUISITOS DEL SISTEMA - MAPA COROPLÉTICO INTERACTIVO DE TABASCO
+================================================================================
+                         Versión del documento: 1.0
 ================================================================================
 
-REQUISITOS MÍNIMOS DEL SISTEMA:
---------------------------------
-- Sistema Operativo: Windows 10/11, Linux (Ubuntu 20.04+), macOS 10.15+
-- RAM: Mínimo 4 GB (Recomendado: 8 GB o más)
-- Espacio en disco: 500 MB libres
-- Navegador web moderno (Chrome, Firefox, Edge, Safari)
+1. REQUISITOS DE HARDWARE
+--------------------------------------------------------------------------------
 
-REQUISITOS DE SOFTWARE:
------------------------
+   Mínimos:
+   - Procesador: 2 núcleos, 1.5 GHz o superior
+   - RAM: 4 GB
+   - Disco: 500 MB libres
+   - Pantalla: 1024 x 768 píxeles
 
-1. NODE.JS Y NPM
-   - Versión mínima: Node.js 14.x o superior
-   - Versión recomendada: Node.js 18.x LTS o superior
-   - Descarga: https://nodejs.org/
-   - Verificar instalación:
-     node --version
-     npm --version
+   Recomendados:
+   - Procesador: 4 núcleos
+   - RAM: 8 GB o superior
+   - Disco: 1 GB libres (incluyendo GeoServer y datos)
+   - Pantalla: 1920 x 1080 o superior
 
-2. GIT (Opcional, para clonar el repositorio)
-   - Versión: Cualquiera reciente
-   - Descarga: https://git-scm.com/
 
-3. SERVIDOR WEB (Opciones):
-   
-   OPCIÓN A: Apache HTTP Server (Recomendado para producción)
-   - Versión: Apache 2.4 o superior
-   - Descarga: https://httpd.apache.org/
-   - Módulos requeridos: mod_headers
-   
-   OPCIÓN B: Node.js con Express (Ya incluido)
-   - Express 4.18.2 o superior
-   - Se instala automáticamente con npm install
-   
-   OPCIÓN C: Live Server (Para desarrollo)
-   - Extensión de VS Code: Live Server
-   - O usar: npx live-server
+2. REQUISITOS DE SISTEMA OPERATIVO
+--------------------------------------------------------------------------------
 
-4. GEOSERVER (Requerido para capas WMS)
-   - Versión: GeoServer 2.20.x o superior
-   - Descarga: https://geoserver.org/release/
-   - Puerto: 8080 (por defecto)
-   - Workspace requerido: agua_tabasco
-   - Configuración CORS necesaria para peticiones desde el frontend
+   Soportados:
+   - Microsoft Windows 10 / 11 (64 bits)
+   - Ubuntu 20.04 LTS o superior
+   - macOS 10.15 (Catalina) o superior
 
-5. NAVEGADOR WEB
-   - Google Chrome 90+ (Recomendado)
-   - Mozilla Firefox 88+
-   - Microsoft Edge 90+
-   - Safari 14+ (macOS)
-   - Debe tener JavaScript habilitado
 
-DEPENDENCIAS DE NODE.JS:
--------------------------
-- express: ^4.18.2
-  (Se instalan automáticamente con: npm install)
+3. REQUISITOS DE SOFTWARE OBLIGATORIOS
+--------------------------------------------------------------------------------
 
-DEPENDENCIAS DEL FRONTEND (CDN):
----------------------------------
-- Leaflet 1.9.x (incluido localmente)
-- Leaflet Side-by-Side Plugin
-- Leaflet Draw 1.0.4
-- Leaflet MiniMap 3.6.1
-- Chart.js 4.4.0
-- Font Awesome 6.4.0
-- Google Fonts (Orbitron, Montserrat)
+   3.1 Node.js y npm
+       - Node.js: 14.x o superior (recomendado: 18.x LTS)
+       - npm: 6.0 o superior (incluido con Node.js)
+       - Descarga: https://nodejs.org/
+       - Verificación:
+         node --version
+         npm --version
 
-ARCHIVOS Y ESTRUCTURA REQUERIDA:
----------------------------------
-- GeoJSON/Tabasco.json (archivo de polígonos de municipios)
-- Data/agua_tabasco_datos.csv (datos del agua)
-- Plugins/leaflet.css y leaflet.js (biblioteca Leaflet)
-- Css/ (todos los archivos CSS)
-- Js/ (todos los archivos JavaScript)
-- Html/ (archivos HTML)
+   3.2 GeoServer
+       - Versión: 2.20.x o superior
+       - Puerto por defecto: 8080
+       - Workspace requerido: agua_subregion_rios
+       - Descarga: https://geoserver.org/release/
+       - Configuración CORS obligatoria para peticiones desde el frontend
 
-CONFIGURACIÓN DE RED:
-----------------------
-- Puerto para servidor web: 3000 (Express) o 80/443 (Apache)
-- Puerto para GeoServer: 8080
-- Conexión a Internet: Requerida para cargar recursos de CDN
-- CORS: Debe estar configurado en GeoServer para permitir peticiones
+   3.3 Navegador web
+       - Google Chrome 90 o superior
+       - Mozilla Firefox 88 o superior
+       - Microsoft Edge 90 o superior
+       - Safari 14 o superior (macOS)
+       - JavaScript debe estar habilitado
+       - Cookies y almacenamiento local recomendados
 
-NOTAS IMPORTANTES:
-------------------
-- El archivo GeoJSON grande (georef-mexico-municipality-millesime@public.json) 
-  está excluido del repositorio por su tamaño (188.94 MB). Si lo necesitas,
-  debes agregarlo manualmente o usar Git LFS.
 
-- GeoServer debe estar ejecutándose antes de usar las funcionalidades de mapas
-  con capas WMS.
+4. REQUISITOS DE SOFTWARE OPCIONALES
+--------------------------------------------------------------------------------
 
-- Para desarrollo local, se recomienda usar Live Server o un servidor HTTP simple.
+   - Git: Para clonar el repositorio (https://git-scm.com/)
+   - Apache HTTP Server 2.4+: Para despliegue en producción
+   - Live Server (extensión VS Code): Para desarrollo local sin Node
+
+
+5. DEPENDENCIAS DE NODE.JS (package.json)
+--------------------------------------------------------------------------------
+
+   Producción:
+   - express: ^4.18.2
+
+   Instalación automática: npm install
+
+
+6. DEPENDENCIAS DEL FRONTEND (CDN / locales)
+--------------------------------------------------------------------------------
+
+   Locales (carpeta Plugins/):
+   - Leaflet 1.9.x (leaflet.js, leaflet.css)
+
+   CDN (cargados en tiempo de ejecución):
+   - Leaflet Side-by-Side
+   - Leaflet Draw 1.0.4
+   - Leaflet MiniMap 3.6.1
+   - Chart.js 4.4.0
+   - Font Awesome 6.4.0
+   - Google Fonts: Orbitron, Montserrat
+
+
+7. ARCHIVOS Y ESTRUCTURA DE DATOS
+--------------------------------------------------------------------------------
+
+   Obligatorios:
+   - GeoJSON/Tabasco.json          Polígonos de municipios de Tabasco
+   - Data/agua_tabasco_datos.csv   Estadísticas de agua por temporada y año
+   - Plugins/leaflet.js            Biblioteca Leaflet
+   - Plugins/leaflet.css
+
+   GeoServer (publicar previamente):
+   - Capas raster con nomenclatura: S1_{año}_{temporada}_clasificado_filtrado
+   - Estilo SLD: agua_3clases (ver GeoServer/agua_3clases.sld)
+
+
+8. CONFIGURACIÓN DE RED
+--------------------------------------------------------------------------------
+
+   Puertos utilizados:
+   - 3000: Servidor Express (aplicación principal)
+   - 8080: GeoServer (capas WMS)
+
+   Requisitos:
+   - Conexión a Internet: Necesaria para CDN (Leaflet Draw, Chart.js, etc.)
+   - CORS: Debe estar habilitado en GeoServer para el origen de la aplicación
+
+
+9. NOTAS DE INSTALACIÓN
+--------------------------------------------------------------------------------
+
+   - Ejecutar "npm install" antes de iniciar el servidor.
+   - GeoServer debe estar en marcha antes de usar capas WMS.
+   - El archivo GeoJSON grande (georef-mexico-municipality-millesime@public.json)
+     está excluido del repositorio; usar Tabasco.json incluido en el proyecto.
+
+
+10. CONTACTO Y DOCUMENTACIÓN ADICIONAL
+--------------------------------------------------------------------------------
+
+   - README.md: Instrucciones de instalación y uso
+   - GeoServer/README_estilo_3clases.md: Configuración del estilo SLD
+   - ESTRUCTURA_COMPLETA_LEAFLET.md: Documentación técnica detallada
 
 ================================================================================
-                    FIN DE REQUISITOS
+                              FIN DEL DOCUMENTO
 ================================================================================
-

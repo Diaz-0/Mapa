@@ -1,6 +1,7 @@
-var mapa = L.map("contenedor-del-mapa", { zoomControl: false }).setView([17.668149360093285,-91.53945922851564], 9)
-
-
+var mapa = L.map("contenedor-del-mapa", { 
+    zoomControl: false,
+    attributionControl: false  // para ocultar toda la caja
+}).setView([17.75, -91.45], 9);
 
 var baseLayers = {
     // Capas de mapa base
